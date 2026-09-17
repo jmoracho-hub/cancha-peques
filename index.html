@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Planificador de entrenos de futsal para el Tudela F.S. Debutantes: calentamiento, ejercicios tecnicos y partido, para peques de 4-6 anios.">
+<title>Entrenamiento Tudela F.S Debutantes</title>
+<style>
+  :root{
+    --bg:#F3F7EF;
+    --surface:#FFFFFF;
+    --surface-alt:#E7F0E1;
+    --ink:#132618;
+    --ink-soft:#4C5E4F;
+    --ink-faint:#7E8F7E;
+    --line:#D6E2CC;
+    --pitch:#1E6B3A;
+    --pitch-deep:#123F22;
+    --pitch-tint:#DCEEDF;
+    --gold:#EFA22B;
+    --gold-deep:#B9740C;
+    --gold-tint:#FBEBD1;
+    --red:#D5514A;
+    --red-deep:#A5372F;
+    --red-tint:#FBE1DF;
+    --blue:#2E6FB0;
+    --blue-tint:#DEEBF8;
+    --shadow: 0 1px 2px rgba(19,38,24,.07), 0 8px 24px -10px rgba(19,38,24,.22);
+    --radius-s:10px;
+    --radius-m:16px;
+    --radius-l:24px;
+    padding-top:env(safe-area-inset-top, 0px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1712;
+      --surface:#162019;
+      --surface-alt:#1C2A20;
+      --ink:#EAF3E7;
+      --ink-soft:#AEC2AC;
+      --ink-faint:#7E9482;
+      --line:#2A3D2E;
+      --pitch:#4CAF6E;
+      --pitch-deep:#79D89A;
+      --pitch-tint:#1C3524;
+      --gold:#F3B94C;
+      --gold-deep:#F8CE7D;
+      --gold-tint:#3A2B14;
+      --red:#E67872;
+      --red-deep:#F0A19C;
+      --red-tint:#3A1E1C;
+      --blue:#6FA8DC;
+      --blue-tint:#1B2C3A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -10px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1712;
+    --surface:#162019;
+    --surface-alt:#1C2A20;
+    --ink:#EAF3E7;
+    --ink-soft:#AEC2AC;
+    --ink-faint:#7E9482;
+    --line:#2A3D2E;
+    --pitch:#4CAF6E;
+    --pitch-deep:#79D89A;
+    --pitch-tint:#1C3524;
+    --gold:#F3B94C;
+    --gold-deep:#F8CE7D;
+    --gold-tint:#3A2B14;
+    --red:#E67872;
+    --red-deep:#F0A19C;
+    --red-tint:#3A1E1C;
+    --blue:#6FA8DC;
+    --blue-tint:#1B2C3A;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -10px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Karla', system-ui, -apple-system, sans-serif;
+    padding-inline:20px;
+    padding-block:24px 60px;
+    max-width:820px;
+    margin:0 auto;
+  }
+  h1,h2,h3{font-family:'Fredoka', system-ui, sans-serif; font-weight:600; margin:0; text-wrap:balance;}
+  p{margin:0;}
+  .mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+
+  /* ---------- header ---------- */
+  .topbar{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+  .brand-mark{flex:none; width:46px; height:46px; color:var(--pitch);}
+  .brand-mark svg{width:100%; height:100%;}
+  .brand h1{font-size:1.55rem; color:var(--pitch-deep);}
+  .brand .eyebrow{font-size:.82rem; color:var(--ink-soft); letter-spacing:.02em; margin-top:2px;}
+
+  /* ---------- controls ---------- */
+  .controls{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-l);
+    padding:18px 20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px 24px;
+    align-items:flex-end;
+    box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .field{display:flex; flex-direction:column; gap:6px; min-width:0;}
+  .field label, .materials-field legend{
+    font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+    padding:0;
+  }
+  #date-input{
+    font-family:'Karla', sans-serif;
+    font-size:.95rem;
+    padding:9px 10px;
+    border-radius:var(--radius-s);
+    border:1px solid var(--line);
+    background:var(--bg);
+    color:var(--ink);
+  }
+  .day-label{font-size:.82rem; color:var(--pitch); font-weight:700; text-transform:capitalize;}
+  .materials-field{border:none; margin:0; padding:0; flex:1 1 260px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:.85rem; font-weight:600; color:var(--ink-soft);
+    background:var(--surface-alt); border:1px solid var(--line);
+    padding:6px 12px 6px 8px; border-radius:999px; cursor:pointer;
+    user-select:none;
+  }
+  .chip:has(input:checked){color:var(--pitch-deep); background:var(--pitch-tint); border-color:var(--pitch);}
+  .chip input{accent-color:var(--pitch); width:15px; height:15px;}
+
+  .actions{display:flex; flex-wrap:wrap; gap:10px; margin-left:auto;}
+  .btn{
+    font-family:'Karla', sans-serif; font-weight:700; font-size:.88rem;
+    border-radius:999px; padding:10px 18px; border:1px solid transparent;
+    cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--pitch); color:#fff;}
+  .btn-primary:hover{background:var(--pitch-deep);}
+  .btn-gold{background:var(--gold); color:#2B1B04;}
+  .btn-gold:hover{background:var(--gold-deep);}
+  .btn-ghost{background:transparent; color:var(--ink-soft); border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--ink-soft); color:var(--ink);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  /* ---------- session card ---------- */
+  .results{display:flex; flex-direction:column; gap:22px;}
+  .empty-hint{
+    background:var(--surface-alt); border:1px dashed var(--line); border-radius:var(--radius-m);
+    padding:18px; color:var(--ink-soft); font-size:.92rem;
+  }
+  .warn{
+    background:var(--red-tint); border:1px solid var(--red); color:var(--red-deep);
+    border-radius:var(--radius-m); padding:14px 16px; font-size:.9rem; font-weight:600;
+  }
+  .coach-note{
+    background:var(--blue-tint); border:1px solid var(--blue); border-radius:var(--radius-m);
+    padding:12px 16px; font-size:.86rem; color:var(--ink-soft); line-height:1.45;
+  }
+  .coach-note strong{color:var(--blue); font-family:'Fredoka', system-ui, sans-serif;}
+  .pill-blue{background:var(--blue-tint); color:var(--blue);}
+  .session-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-l);
+    padding:22px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:18px;
+  }
+  .session-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+  .session-head h2{font-size:1.2rem; color:var(--ink);}
+  .session-head time{text-transform:capitalize; color:var(--pitch-deep);}
+  .pill{
+    font-family:'IBM Plex Mono', monospace; font-size:.78rem; font-weight:600;
+    padding:4px 11px; border-radius:999px; background:var(--surface-alt); color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .pill-gold{background:var(--gold-tint); color:var(--gold-deep);}
+  .pill-pitch{background:var(--pitch-tint); color:var(--pitch-deep);}
+  .pill-red{background:var(--red-tint); color:var(--red-deep);}
+
+  .phase{border-left:4px solid var(--line); padding-left:16px; display:flex; flex-direction:column; gap:10px;}
+  .phase-warmup{border-color:var(--gold);}
+  .phase-tech{border-color:var(--pitch);}
+  .phase-match{border-color:var(--red);}
+  .phase-head{display:flex; align-items:center; gap:9px;}
+  .phase-head svg{width:20px; height:20px; flex:none;}
+  .phase-warmup .phase-head svg{color:var(--gold-deep);}
+  .phase-tech .phase-head svg{color:var(--pitch);}
+  .phase-match .phase-head svg{color:var(--red);}
+  .phase-head h3{font-size:1rem; flex:1;}
+  .phase-items{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px;}
+  .phase-items li{
+    background:var(--surface-alt); border-radius:var(--radius-m); padding:12px 14px;
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .item-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .item-top strong{font-size:.96rem;}
+  .item-top .mono{color:var(--ink-faint); font-size:.78rem;}
+  .item-desc{font-size:.88rem; color:var(--ink-soft); line-height:1.45;}
+  .item-meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+  .tag{
+    font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    padding:2px 8px; border-radius:999px; background:var(--bg); color:var(--ink-faint); border:1px solid var(--line);
+  }
+  .tag-foco{background:var(--pitch-tint); color:var(--pitch-deep); border-color:transparent;}
+
+  .ex-item{cursor:pointer; position:relative;}
+  .ex-item:hover{background:var(--pitch-tint);}
+  .ex-item:focus-visible{outline:2px solid var(--pitch); outline-offset:2px;}
+  .toggle-hint{
+    display:inline-flex; align-items:center; gap:5px; align-self:flex-start;
+    font-size:.76rem; font-weight:700; color:var(--pitch); margin-top:2px;
+  }
+  .toggle-hint .chevron{width:14px; height:14px; transition:transform .18s ease;}
+  .ex-item[aria-expanded="true"] .toggle-hint .chevron{transform:rotate(180deg);}
+  .item-detail{
+    margin-top:2px; padding-top:10px; border-top:1px dashed var(--line);
+  }
+  .item-detail p{font-size:.86rem; color:var(--ink-soft); line-height:1.55;}
+
+  /* ---------- history ---------- */
+  .history{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-l);
+    padding:20px 22px; box-shadow:var(--shadow);
+  }
+  .history-head{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .history-head h2{font-size:1.05rem;}
+  .count-pill{background:var(--surface-alt); color:var(--ink-soft); font-size:.75rem; font-weight:700; padding:2px 10px; border-radius:999px;}
+  .history-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .history-item{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    border:1px solid var(--line); border-radius:var(--radius-m); padding:11px 14px; flex-wrap:wrap;
+  }
+  .history-item .hi-date{font-weight:700; text-transform:capitalize; font-size:.88rem; min-width:150px;}
+  .history-item .hi-summary{font-size:.82rem; color:var(--ink-soft); flex:1 1 260px;}
+  .history-item .hi-del{
+    background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:.78rem;
+    text-decoration:underline; padding:2px 0;
+  }
+  .history-item .hi-del:hover{color:var(--red);}
+  .history-empty{color:var(--ink-faint); font-size:.88rem;}
+
+  .note{margin-top:26px; text-align:center; color:var(--ink-faint); font-size:.82rem;}
+
+  /* ---------- toast ---------- */
+  #toast{
+    position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom, 0px));
+    transform:translateX(-50%) translateY(12px); background:var(--ink); color:var(--bg);
+    padding:10px 18px; border-radius:999px; font-size:.85rem; font-weight:600;
+    box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+    max-width:88vw; text-align:center;
+  }
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  #toast.warn-toast{background:var(--red);}
+
+  @media (max-width:640px){
+    html{font-size:18px;}
+    body{
+      padding-inline:16px;
+      padding-block:14px calc(92px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .topbar{
+      position:sticky; top:env(safe-area-inset-top, 0px); z-index:15;
+      margin:calc(-14px - env(safe-area-inset-top, 0px)) -16px 16px;
+      padding:calc(14px + env(safe-area-inset-top, 0px)) 16px 12px;
+      background:color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand h1{font-size:1.28rem;}
+    .brand .eyebrow{font-size:.78rem;}
+    .brand-mark{width:38px; height:38px;}
+
+    .controls{padding:16px; border-radius:var(--radius-m); gap:16px;}
+    .field label, .materials-field legend{font-size:.72rem;}
+    #date-input{width:100%; padding:12px 12px; font-size:1rem; min-height:46px;}
+    .day-label{font-size:.9rem;}
+    .chip{padding:9px 14px 9px 10px; font-size:.92rem;}
+    .chip input{width:18px; height:18px;}
+
+    /* La barra de acciones se convierte en una barra fija tipo app, siempre a mano. */
+    .actions{
+      position:fixed; left:0; right:0; bottom:0; margin-left:0;
+      display:flex; gap:8px; flex-wrap:nowrap;
+      padding:10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+      background:var(--surface); border-top:1px solid var(--line);
+      box-shadow:0 -10px 24px -14px rgba(19,38,24,.35);
+      z-index:20;
+    }
+    .actions .btn{flex:1 1 0; justify-content:center; padding:12px 10px; font-size:.9rem; min-height:48px;}
+
+    .session-card{padding:16px; border-radius:var(--radius-m); gap:20px;}
+    .session-head h2{font-size:1.1rem;}
+    .phase{padding-left:14px;}
+    .phase-head h3{font-size:1.04rem;}
+    .phase-items{gap:14px;}
+    .phase-items li{padding:14px 16px;}
+    .item-top strong{font-size:1.02rem;}
+    .item-desc{font-size:.92rem;}
+    .toggle-hint{font-size:.82rem;}
+    .tag{font-size:.72rem; padding:3px 9px;}
+
+    .history{padding:18px;}
+
+    #toast{bottom:calc(78px + env(safe-area-inset-bottom, 0px));}
+  }
+
+  @media print{
+    body{max-width:none; padding:0; background:#fff; color:#000;}
+    .topbar .eyebrow{color:#333;}
+    .controls, .history, .note, #toast, .btn, .actions{display:none !important;}
+    body{padding-bottom:0 !important;}
+    .topbar{position:static !important; margin:0 0 16px !important; padding:0 !important; background:none !important; backdrop-filter:none !important; border-bottom:none !important;}
+    .session-card{box-shadow:none; border:1px solid #999;}
+    .phase-items li{background:#f4f4f4;}
+    .toggle-hint{display:none !important;}
+    .item-detail[hidden]{display:block !important;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .btn, #toast{transition:none;}
+  }
+
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+</head>
+<body>
+<div id="app-shell">
+  <header class="topbar">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/>
+        <line x1="12" y1="9.4" x2="12" y2="6"/>
+        <line x1="14.5" y1="11" x2="17.6" y2="9.2"/>
+        <line x1="14.5" y1="13" x2="17.6" y2="14.8"/>
+        <line x1="9.5" y1="11" x2="6.4" y2="9.2"/>
+        <line x1="9.5" y1="13" x2="6.4" y2="14.8"/>
+        <line x1="12" y1="14.6" x2="12" y2="18"/>
+      </svg>
+    </span>
+    <div class="brand">
+      <h1>Entrenamiento Tudela F.S Debutantes</h1>
+      <p class="eyebrow">Planificador de entrenos · fútbol sala 4-6 años · lunes y miércoles</p>
+    </div>
+  </header>
+
+  <div id="controls" class="controls">
+    <div class="field">
+      <label for="date-input">Fecha del entreno</label>
+      <input type="date" id="date-input" value="">
+      <p id="day-label" class="day-label">—</p>
+    </div>
+    <fieldset class="field age-field">
+      <legend>Grupo de edad</legend>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="edad" id="edad-4" value="4"> 4 años</label>
+        <label class="chip"><input type="radio" name="edad" id="edad-5" value="5"> 5 años</label>
+        <label class="chip"><input type="radio" name="edad" id="edad-6" value="6"> 6 años</label>
+        <label class="chip"><input type="radio" name="edad" id="edad-mixto" value="mixto" checked> Mixto (4-6)</label>
+      </div>
+    </fieldset>
+    <fieldset class="field materials-field">
+      <legend>Material disponible</legend>
+      <div class="chips">
+        <label class="chip"><input type="checkbox" id="mat-conos" checked> Conos</label>
+        <label class="chip"><input type="checkbox" id="mat-balones" checked> Balones</label>
+        <label class="chip"><input type="checkbox" id="mat-petos" checked> Petos</label>
+        <label class="chip"><input type="checkbox" id="mat-aros" checked> Aros</label>
+        <label class="chip"><input type="checkbox" id="mat-picas" checked> Picas</label>
+        <label class="chip"><input type="checkbox" id="mat-porterias" checked> Porterías</label>
+      </div>
+    </fieldset>
+    <div class="actions">
+      <button id="btn-generate" class="btn btn-primary" type="button">Generar entreno</button>
+      <button id="btn-save" class="btn btn-gold" type="button">Guardar en historial</button>
+      <button id="btn-print" class="btn btn-ghost" type="button">Imprimir ficha</button>
+    </div>
+  </div>
+
+  <main id="results" class="results"></main>
+
+  <p class="note">21 peques repartidos en dos equipos: mismo plan de sesión, cada equipo en su mitad de la pista.</p>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script id="state-data" type="application/json">{"history":[]}</script>
+<script id="app-logic">
+(function(){
+  "use strict";
+
+  var BANK = {
+    warmup: [
+      {id:'w1', edadMin:4, nombre:'El semáforo', desc:'Corren libres por la pista: verde = correr, amarillo = andar despacio, rojo = quietos como estatuas.', mat:['conos'], detalle:'Reparte a los peques por toda la pista y ponte en un lateral donde te vean bien. Cuando digas "verde" corren a tope, con "ámbar" caminan despacio levantando las rodillas, y con "rojo" se quedan quietos como estatuas sin mover ni un pie. Cambia las órdenes cada 5-8 segundos y mezcla el orden para que estén atentos. Consejo: al principio hazlo tú con la voz; más adelante puedes usar un silbato distinto para cada color.'},
+      {id:'w2', edadMin:4, nombre:'Pillapilla de las colas', desc:'Cada niño lleva un peto metido en el pantalón a modo de cola; hay que robar colas sin perder la propia.', mat:['petos'], detalle:'Cada niño se coloca un peto metido por dentro del pantalón, dejando un trozo colgando a la vista. A la señal, todos intentan robar colas ajenas sin que les quiten la suya, y guardan en el bolsillo las que consiguen. Quien se queda sin cola sigue jugando robando: nadie se queda parado. Consejo: si alguno se frustra por perder la cola, dale una de repuesto discretamente para que no deje de participar.'},
+      {id:'w3', edadMin:5, nombre:'Los bloques de hielo', desc:'Un pillador congela tocando; los demás descongelan pasando por debajo de las piernas del congelado.', mat:[], detalle:'Un niño (o el entrenador) hace de pillador y el resto corre libre por la pista. A quien toca se queda "congelado", de pie con las piernas abiertas, hasta que un compañero pase gateando por debajo para descongelarlo. Cambia de pillador cada 1-2 minutos para que todos prueben ese rol. Consejo: marca los límites de la pista con conos bien visibles para que no se salgan corriendo.'},
+      {id:'w4', edadMin:5, nombre:'Ratones y gatos', desc:'Dos filas enfrentadas; al nombrar "ratones" o "gatos" ese equipo persigue al otro hasta una línea segura.', mat:['conos'], detalle:'Dos filas se colocan una frente a otra, separadas por un par de metros, con una línea de conos a cada lado marcando la meta de cada equipo. Cuando dices "ratones", ese equipo corre hacia su línea segura mientras los "gatos" intentan tocarlos antes de que lleguen; luego se invierte. Alterna el orden de las palabras para mantener la sorpresa. Consejo: empieza con distancias cortas y ve alejando las filas según ganen confianza.'},
+      {id:'w5', edadMin:5, nombre:'El espejo', desc:'Por parejas, uno hace movimientos (saltar, girar, agacharse) y el otro los copia como un espejo.', mat:[], detalle:'Se colocan por parejas, uno frente al otro a un paso de distancia. Uno hace de líder y el otro debe copiar sus movimientos como si fuera un espejo: saltar, agacharse, girar, levantar los brazos. Cada 30-40 segundos cambian de rol. Consejo: dales ideas de movimientos si se quedan sin imaginación, y anímales a hacerlo despacio para que el compañero pueda seguirles bien.'},
+      {id:'w6', edadMin:4, nombre:'Islas seguras', desc:'Aros repartidos por el suelo; cuando el entrenador silba, todos deben subirse a una isla sin caer al mar.', mat:['aros'], detalle:'Reparte aros por toda la pista, uno menos que el número de niños que juegan esa ronda. Mientras corren libremente al ritmo que marques, al oír tu silbato todos deben subirse a una isla (aro) sin caerse "al mar"; quien se queda sin isla hace una prueba divertida (dar tres saltos) y sigue jugando. Ve retirando algún aro para aumentar la dificultad. Consejo: dejar aros de sobra para los más pequeños evita frustraciones innecesarias a estas edades.'},
+      {id:'w7', edadMin:5, nombre:'La serpiente que crece', desc:'Un niño persigue al resto; cada uno que toca se coge de la mano y la serpiente sigue creciendo.', mat:[], detalle:'Un niño empieza siendo el pillador y persigue al resto por la pista. Cada compañero al que toca se coge de su mano, formando una serpiente cada vez más larga que sigue persiguiendo entre todos. El juego acaba cuando solo queda un niño libre, que gana esa ronda. Consejo: recuérdales que solo pueden tocar con las manos de los extremos de la serpiente para que no se hagan daño empujando.'},
+      {id:'w8', edadMin:5, nombre:'El balón caliente', desc:'En círculo, se pasan un balón rápido de mano en mano; al decir "¡fuego!", quien lo tiene hace 3 saltos.', mat:['balones'], detalle:'Todos en círculo, sentados o de pie, se van pasando un balón de mano en mano lo más rápido posible. Cuando el entrenador grita "¡fuego!", el niño que tiene el balón en ese momento hace tres saltos o gira sobre sí mismo antes de seguir el juego. Varía el ritmo y el tiempo entre gritos para mantener la sorpresa. Consejo: con grupos grandes, usa dos balones a la vez para que nadie espere demasiado su turno.'},
+      {id:'w9', edadMin:4, nombre:'La granja de animales', desc:'Circuito por estaciones: saltar como rana, andar como cangrejo y correr como guepardo entre los conos.', mat:['conos'], detalle:'Monta un circuito corto con conos marcando 3-4 estaciones. En cada una, los niños cambian de forma de desplazarse: saltar como rana, andar a cuatro patas como cangrejo, correr como guepardo. Pasan en fila o por grupos pequeños y repiten el circuito 2-3 veces. Consejo: exagera tú mismo los movimientos como ejemplo, les encanta imitar al entrenador haciendo el animal.'},
+      {id:'w10', edadMin:4, nombre:'El túnel viajero', desc:'En fila con las piernas abiertas formando un túnel, el último gatea por dentro hasta ponerse el primero.', mat:[], detalle:'Todo el grupo se coloca en fila con las piernas bien abiertas, formando un túnel humano. El último de la fila se agacha y gatea por dentro del túnel hasta colocarse el primero, y entonces el nuevo último repite la acción. Así el "tren" avanza mientras cada uno pasa su turno por el túnel. Consejo: marca un ritmo claro ("¡ahora tú!") para que no se pisen ni se hagan un lío con el turno.'},
+      {id:'w11', edadMin:4, nombre:'Pilla-pilla del entrenador', desc:'El entrenador persigue a todos; quien es tocado se sienta hasta que un compañero lo libera chocando la mano.', mat:[], detalle:'El entrenador persigue a todo el grupo por la pista delimitada con conos. Quien es tocado se sienta en el sitio donde le han pillado, y solo puede volver a jugar si otro compañero pasa y le choca la mano para liberarlo. El juego sigue mientras casi todos estén sentados esperando ayuda, lo que anima a que se ayuden entre ellos. Consejo: deja que a veces te "pillen" a ti también, les da mucha alegría y refuerza la implicación.'},
+      {id:'w12', edadMin:5, nombre:'El rey del círculo', desc:'Dentro de un círculo de conos, hay que tocar todos los aros repartidos sin salirse ni chocar con nadie.', mat:['conos','aros'], detalle:'Marca un círculo grande con conos y reparte varios aros dentro. Dentro del círculo, cada niño debe tocar con el pie todos los aros posibles en un tiempo determinado, sin salirse del círculo ni chocar con los compañeros. Al acabar el tiempo, cuenta en voz alta cuántos aros ha tocado cada uno como un pequeño reto personal. Consejo: no lo plantees como competición estricta a esta edad, celebra el esfuerzo de todos por igual.'}
+    ],
+    tech: [
+      {id:'t1', edadMin:5, nombre:'Cada uno en su casa', foco:'colocacion', desc:'Se marcan posiciones con aros (portero, defensas, delanteros); al oír "¡a casa!" cada niño corre a la suya.', mat:['aros'], detalle:'Coloca aros de colores en el suelo representando cada posición (por ejemplo, un aro para el portero, dos para defensas, dos para delanteros). Explica brevemente qué aro es cada "casa" y deja que prueben a moverse libres por la pista. Cuando grites "¡a casa!", cada niño debe correr al aro de la posición que le hayas asignado esa ronda. Consejo: ve rotando las posiciones asignadas para que todos prueben portero, defensa y ataque a lo largo de las semanas.'},
+      {id:'t2', edadMin:4, nombre:'El espejo del sitio', foco:'colocacion', desc:'El entrenador señala una zona de la pista y todos corren a colocarse allí lo más rápido posible.', mat:['conos'], detalle:'Divide mentalmente la pista en 2-3 zonas (por ejemplo, mitad de ataque y mitad de defensa) y explícaselo señalando con el brazo. Los niños se mueven libremente por toda la pista y, cuando tú señalas una zona en voz alta, todos corren a colocarse dentro de ella lo más rápido posible. Añade dificultad marcando zonas más pequeñas o pidiendo que se agrupen por parejas dentro de la zona. Consejo: usa siempre el mismo gesto de brazo junto con la palabra, les ayuda a asociar la señal visual.'},
+      {id:'t3', edadMin:4, nombre:'Semáforo de zonas', foco:'colocacion', desc:'La pista se divide en 3 zonas con conos de colores; al nombrar un color, todos deben estar en esa zona.', mat:['conos'], detalle:'Divide la pista en 3 zonas con conos de colores distintos (por ejemplo rojo, amarillo y verde) bien visibles desde cualquier punto. Los niños se mueven libremente y, al nombrar un color, todos deben situarse dentro de la zona de ese color en pocos segundos. Puedes combinarlo con una forma de desplazamiento (andando, a la pata coja) para hacerlo más divertido. Consejo: empieza nombrando solo dos zonas y añade la tercera cuando veas que lo dominan.'},
+      {id:'t4', edadMin:6, nombre:'Ocupa el hueco', foco:'colocacion', desc:'Mientras el balón se mueve entre dos entrenadores, cada niño debe colocarse siempre en un aro libre.', mat:['aros','balones'], detalle:'Reparte aros por la pista, algunos más que niños jugando, y coloca a dos entrenadores o ayudantes que se pasan un balón entre ellos caminando. Mientras el balón se mueve, cada niño debe estar siempre dentro de un aro libre, cambiando de aro en cuanto vea que otro compañero se acerca al suyo. El objetivo es que aprendan a ocupar espacios libres en vez de amontonarse. Consejo: comenta en voz alta cuando alguien ocupa bien un hueco vacío, refuerza la idea con ejemplos reales durante el juego.'},
+      {id:'t5', edadMin:5, nombre:'El barco a tu puesto', foco:'colocacion', desc:'Variante de "el barco se hunde": cada orden ("portero", "defensa", "ataque") lleva a un grupo de conos distinto.', mat:['conos'], detalle:'Es una variante de "el barco se hunde": asigna un grupo de conos distinto a cada posición (portero, defensa, ataque) en zonas separadas de la pista. Mientras corren libremente, al gritar el nombre de una posición ("¡defensa!"), solo los niños asignados a esa posición corren a su grupo de conos; el resto sigue jugando libre. Ve nombrando las tres posiciones en distinto orden para mantener la atención. Consejo: usa siempre la misma palabra para cada posición durante todo el entreno, evita sinónimos que puedan confundirles.'},
+      {id:'t6', edadMin:5, nombre:'Pases por parejas', foco:'pases', desc:'Por parejas y de frente, se pasan el balón con el interior del pie, separándose un paso cada vez que lo consiguen.', mat:['balones'], detalle:'Forma parejas de niveles parecidos y colócalas una frente a otra a unos 3 metros, cada una con un balón. Deben pasarse el balón con el interior del pie, intentando que llegue rodando al compañero sin que se le escape. Cada vez que completen 3-4 pases seguidos sin fallo, pueden dar un paso hacia atrás para aumentar la distancia. Consejo: recuérdales "pie de apoyo al lado del balón, golpe con el interior", es la única indicación técnica que necesitan a esta edad.'},
+      {id:'t7', edadMin:4, nombre:'El círculo mágico', foco:'pases', desc:'En círculo, se pasan el balón diciendo en voz alta el nombre del compañero que lo recibe.', mat:['balones'], detalle:'Sienta o coloca de pie a todo el grupo formando un círculo amplio, con un balón. Cada niño pasa el balón a otro compañero diciendo su nombre en voz alta justo antes de pasarlo, para que esté atento y lo reciba bien. Si el grupo es grande, puedes usar dos balones a la vez desde puntos opuestos del círculo. Consejo: este juego es también un truco estupendo para que aprendan rápido los nombres de sus compañeros de equipo.'},
+      {id:'t8', edadMin:6, nombre:'Pasa y sigue', foco:'pases', desc:'Tras pasar el balón, cada niño corre a ocupar el sitio del compañero al que se lo ha pasado.', mat:['balones','conos'], detalle:'Coloca a los niños repartidos por la pista, cada uno cerca de un balón o compartiendo por parejas. Tras pasar el balón a un compañero, el que pasa corre inmediatamente a ocupar el sitio donde estaba el que ha recibido, generando movimiento continuo. Marca con conos los puntos de partida al principio si les cuesta entender la dinámica. Consejo: empieza solo con pases y, cuando lo dominen, añade que el que recibe también tenga que controlar el balón antes de pasarlo de nuevo.'},
+      {id:'t9', edadMin:4, nombre:'Pases a la diana', foco:'pases', desc:'Se intenta golpear un cono o colarse dentro de un aro con un pase raso desde varios metros.', mat:['balones','conos'], detalle:'Coloca conos o aros como "dianas" a varios metros de distancia y separa a los niños en pequeños grupos, cada uno con un balón, frente a una diana. Por turnos, intentan golpear el cono o colar el balón dentro del aro con un pase raso y controlado, sin chutar fuerte. Cuenta los aciertos de cada uno como un reto personal divertido. Consejo: acerca la diana a quien le cueste más acertar, así todos sienten que progresan.'},
+      {id:'t10', edadMin:5, nombre:'El tren de pases', foco:'pases', desc:'En fila, se pasa el balón al primero, que se coloca al final; el tren avanza pasando y recolocándose.', mat:['balones'], detalle:'Coloca a los niños en fila, todos mirando hacia el mismo lado, con un balón para el primero de la fila. El primero pasa el balón al segundo y corre a colocarse al final de la fila; el segundo recibe, pasa al tercero y hace lo mismo, y así sucesivamente, avanzando como un tren. Cuando dominen la mecánica, puedes cronometrar cuántas vueltas completas dan en un minuto. Consejo: al principio hazlo despacio y guía tú los turnos en voz alta hasta que cojan el ritmo.'},
+      {id:'t11', edadMin:4, nombre:'El slalom de conos', foco:'conduccion', desc:'Conducir el balón en zigzag entre una hilera de conos, tocándolo con ambos pies.', mat:['balones','conos'], detalle:'Coloca una hilera de 5-6 conos separados por un paso, en línea recta. Cada niño, con su balón, debe conducirlo en zigzag entre los conos usando toques cortos con ambos pies, sin que el balón se le escape lejos. Deja que repitan el recorrido varias veces, cronometrando alguna vuelta como reto personal. Consejo: separa más los conos al principio y ve juntándolos poco a poco según ganen control.'},
+      {id:'t12', edadMin:4, nombre:'Persigue tu sombra', foco:'conduccion', desc:'Conducción libre por toda la pista sin perder el balón ni chocar con ningún compañero.', mat:['balones'], detalle:'Reparte un balón por niño y deja que se muevan libremente por toda la pista, conduciendo el balón pegado al pie sin perderlo de vista ni chocar con ningún compañero. Da órdenes de vez en cuando ("¡más rápido!", "¡para el balón con la planta!") para introducir variaciones sin parar el juego. Es ideal para que cada niño toque muchísimas veces el balón en poco tiempo. Consejo: si el grupo es numeroso, delimita bien el espacio con conos para evitar choques.'},
+      {id:'t13', edadMin:4, nombre:'Semáforo con balón', foco:'conduccion', desc:'Conducir el balón por la pista y, a la señal, pararlo en seco con la planta del pie.', mat:['balones','conos'], detalle:'Cada niño conduce su balón libremente por la pista al ritmo que marques con la voz o un silbato. A la señal de "stop", deben parar el balón en seco pisándolo con la planta del pie y quedarse quietos hasta la siguiente orden. Alterna órdenes de ritmo (despacio, rápido) con las de parada para practicar el control. Consejo: felicita especialmente a quien para el balón sin que se le escape, es el gesto técnico clave de este juego.'},
+      {id:'t14', edadMin:5, nombre:'El camino secreto', foco:'conduccion', desc:'Circuito marcado con picas y aros que hay que recorrer conduciendo el balón sin salirse del camino.', mat:['balones','picas','aros'], detalle:'Monta un circuito serpenteante usando picas y aros en el suelo, formando un "camino" que los niños deben recorrer conduciendo el balón sin salirse ni pisar las picas. Dependiendo del espacio, pueden hacerlo en fila esperando turno o con varios circuitos paralelos para que no haya esperas largas. Anímales a completar el camino sin perder el balón antes de aumentar la velocidad. Consejo: deja que ellos mismos ayuden a montar el circuito, se lo toman como parte del juego.'},
+      {id:'t15', edadMin:6, nombre:'Carrera de conducción', foco:'conduccion', desc:'Relevos por equipos: conducir el balón hasta un cono, rodearlo y volver para dar el relevo al siguiente.', mat:['balones','conos'], detalle:'Divide al grupo en equipos pequeños de 3-4 niños, en fila detrás de una línea de salida, cada equipo con un balón. Por turnos, el primero de cada fila conduce el balón hasta un cono situado varios metros por delante, rodea el cono y vuelve conduciendo hasta dar el relevo (tocar la mano) al siguiente compañero. Gana el equipo que termina antes todas sus rondas, aunque lo importante es que todos corran y toquen el balón. Consejo: iguala el nivel de los equipos para que la carrera sea emocionante para todos, no solo para los más rápidos.'}
+    ],
+    match: [
+      {id:'m1', edadMin:4, nombre:'Partido con dos porterías', desc:'El clásico: dos equipos, dos porterías, a disfrutar y meter goles.', mat:['porterias','balones'], detalle:'Divide a los peques en dos equipos equilibrados (o usa la división habitual de tu grupo) y coloca una portería en cada extremo de la pista. Deja que jueguen con las reglas básicas del fútbol sala adaptadas: sin agobiar con el fuera de juego ni las faltas estrictas, solo animando a pasar y a disfrutar. Cambia de porteros cada pocos minutos para que todos prueben esa posición. Consejo: interviene poco en las jugadas, deja que ellos decidan y disfruten, corrige solo lo esencial de seguridad.'},
+      {id:'m2', edadMin:5, nombre:'Partido a 4 porterías', desc:'Se colocan 4 mini porterías con conos; vale marcar en cualquiera para que todos ataquen más.', mat:['conos','balones'], detalle:'Coloca 4 mini porterías (dos conos separados medio metro) una en cada esquina o lado de la pista, en vez de las dos porterías tradicionales. Cualquier equipo puede marcar gol en cualquiera de las 4 porterías, lo que multiplica las opciones de ataque y hace que participen más niños a la vez. Es ideal para trabajar la idea de buscar espacios libres para atacar. Consejo: numera o pinta las porterías de colores distintos para que sea más fácil dirigir el juego con instrucciones cortas.'},
+      {id:'m3', edadMin:4, nombre:'Partido sin líneas', desc:'Todo vale dentro de la pista: sin fueras de banda ni faltas, solo correr y disfrutar del balón.', mat:['balones'], detalle:'Juega un partido normal pero sin pitar fuera de banda, faltas ni otras interrupciones: el balón sigue en juego pase lo que pase, salvo que se salga muy lejos de la pista. Esto mantiene el ritmo altísimo y evita las esperas que a estas edades hacen que se despisten. Solo debes intervenir si hay riesgo de un golpe fuerte entre dos niños. Consejo: es el partido perfecto para cerrar el entreno con máxima diversión y sin interrupciones que corten el juego.'},
+      {id:'m4', edadMin:4, nombre:'Partido con comodín', desc:'El entrenador juega siempre con el equipo que no tiene el balón, para ayudarles a recuperarlo.', mat:['balones','petos'], detalle:'Juega un partido normal, pero tú (el entrenador) participas siempre ayudando al equipo que en ese momento no tiene el balón, sin marcar goles tú mismo. Esto ayuda a los equipos con más dificultad a recuperar balones y sentirse partícipes del juego, evitando que un equipo domine todo el partido. Ve cambiando de bando cada vez que el balón cambia de equipo. Consejo: aprovecha tu posición de comodín para dar indicaciones sencillas en caliente, como "¡busca un hueco!".'},
+      {id:'m5', edadMin:4, nombre:'Gol de oro', desc:'Cada punto se juega hasta el primer gol; en cuanto entra, se reinicia una ronda nueva.', mat:['porterias','balones'], detalle:'Cada ronda se juega solo hasta que se marca el primer gol; en cuanto entra, paras el juego un segundo, celebras el gol con el grupo y reinicias una ronda nueva desde el centro. Esto genera muchos reinicios y momentos de celebración en poco tiempo, algo que en estas edades mantiene muy alta la motivación. Puedes llevar la cuenta de goles de cada ronda en voz alta como parte de la diversión. Consejo: reinicia rápido, la clave de este juego es no dejar tiempos muertos entre rondas.'},
+      {id:'m6', edadMin:6, nombre:'Partido 3 toques', desc:'Cada jugador puede tocar el balón un máximo de 3 veces antes de pasarlo o chutar.', mat:['balones','petos'], detalle:'Juega un partido normal, pero cada jugador solo puede tocar el balón un máximo de 3 veces (por ejemplo: controlar, y dos toques más para pasar o chutar) antes de tener que soltarlo. Es un reto divertido más que una norma estricta a estas edades: no hace falta pitar faltas si se pasan, solo recordarlo con humor. Ayuda a que no acaparen el balón y aprendan a pasarlo antes. Consejo: cuenta en voz alta los toques de algún niño como ejemplo ("¡uno, dos, tres, pasa!") para que el resto entienda la dinámica jugando.'},
+      {id:'m7', edadMin:4, nombre:'Partido con dos balones', desc:'Dos balones en juego a la vez para que todos los peques participen mucho más.', mat:['balones','petos'], detalle:'Juega el mismo partido de siempre pero metiendo un segundo balón en juego a la vez, de forma que haya dos jugadas simultáneas en la misma pista. Esto multiplica las ocasiones de que cada niño toque el balón, algo clave para mantener su interés a esta edad. Retira uno de los balones si ves que se genera demasiado caos o algún golpe. Consejo: usa balones de colores distintos para que resulte más fácil seguir las dos jugadas a la vez.'},
+      {id:'m8', edadMin:5, nombre:'Rey del gol', desc:'Se juega en equipo, pero cada gol también suma un punto individual para quien lo marca.', mat:['porterias','petos'], detalle:'Juega un partido por equipos como siempre, pero además de celebrar el resultado del equipo, lleva la cuenta de qué niño marca cada gol como un pequeño reconocimiento individual. Al final del partido, felicita en voz alta a todos los que han marcado al menos un gol, sin convertirlo en una competición seria entre ellos. Consejo: destaca también buenas jugadas de pase o de defensa, no solo los goles, para no centrar todo el foco en marcar.'}
+    ]
+  };
+
+  var FOCO_LABEL = {colocacion:'Colocación', pases:'Pases', conduccion:'Conducción'};
+  var MATERIAL_LABEL = {conos:'Conos', balones:'Balones', petos:'Petos', aros:'Aros', picas:'Picas', porterias:'Porterías'};
+  var MATERIAL_KEYS = ['conos','balones','petos','aros','picas','porterias'];
+
+  // reparto de los 60 minutos y consejo de metodología según el grupo de edad
+  var AGE_INFO = {
+    '4': {
+      label: '4 años', warmMin: 20, techMin: 15, matchMin: 25,
+      consejo: 'A los 4 años el balón es sobre todo un juguete: prioriza el juego libre y las tareas individuales (un balón por niño) frente al ejercicio dirigido. No corrijas el gesto técnico todavía, cada actividad debe durar 3-5 minutos como mucho, y evita las filas de espera: si hay que esperar turno, se desconectan.'
+    },
+    '5': {
+      label: '5 años', warmMin: 15, techMin: 25, matchMin: 20,
+      consejo: 'Con 5 años ya aguantan consignas de dos pasos ("controla y pasa") y tareas por parejas. Empieza a introducir el control y el pase con distancias cortas, sigue premiando la actitud y el esfuerzo por encima del resultado, y usa el partido final como su recompensa por haber currado en la parte técnica.'
+    },
+    '6': {
+      label: '6 años', warmMin: 15, techMin: 30, matchMin: 15,
+      consejo: 'A los 6 años puedes pedir algo más de precisión técnica e introducir conceptos simples como ocupar espacios libres o encadenar dos acciones (control + pase). Sigue siendo fútbol-juego: nada de charlas tácticas largas, la pizarra la dibujan corriendo en la pista.'
+    },
+    'mixto': {
+      label: 'Grupo mixto (4-6 años)', warmMin: 15, techMin: 30, matchMin: 15,
+      consejo: 'Con un grupo mixto, forma parejas heterogéneas (un mayor con un pequeño) en los ejercicios técnicos: el pequeño aprende imitando y el mayor aprende explicando, que también es aprendizaje. Vigila que las tareas elegidas no se queden cortas para los de 6 ni se les atraganten a los de 4.'
+    }
+  };
+  var AGE_KEYS = ['4','5','6','mixto'];
+
+  var ICON_WARMUP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="7" y2="7"/><line x1="17" y1="17" x2="18.8" y2="18.8"/><line x1="18.8" y1="5.2" x2="17" y2="7"/><line x1="7" y1="17" x2="5.2" y2="18.8"/></svg>';
+  var ICON_TECH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>';
+  var ICON_MATCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7.6 9.3 9.9l1 3.2h3.4l1-3.2Z" stroke-linejoin="round"/><line x1="12" y1="3" x2="12" y2="7.6"/><line x1="6.3" y1="9.9" x2="9.3" y2="9.9"/><line x1="17.7" y1="9.9" x2="14.7" y2="9.9"/><line x1="9.6" y1="17.5" x2="10.3" y2="13.1"/><line x1="14.4" y1="17.5" x2="13.7" y2="13.1"/></svg>';
+
+  var STATE = { history: [] };
+  var DRAFT = null;
+  var LOCAL_KEY = 'tudela-fs-debutantes-state';
+
+  function $(id){ return document.getElementById(id); }
+
+  function hasClaudeRuntime(){
+    return !!(window.claude && window.claude.use);
+  }
+
+  function readLocalState(){
+    try{
+      var raw = localStorage.getItem(LOCAL_KEY);
+      if(!raw) return null;
+      var parsed = JSON.parse(raw);
+      return (parsed && Array.isArray(parsed.history)) ? parsed : null;
+    }catch(e){ return null; }
+  }
+
+  function writeLocalState(){
+    try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(STATE)); return true; }
+    catch(e){ return false; }
+  }
+
+  function loadState(){
+    try{
+      var raw = $('state-data').textContent;
+      var parsed = JSON.parse(raw);
+      if(parsed && Array.isArray(parsed.history)) STATE = parsed;
+    }catch(e){ STATE = { history: [] }; }
+
+    // Fuera del runtime de Claude (por ejemplo, alojada en GitHub Pages)
+    // el historial se guarda en este navegador, no en la página publicada.
+    if(!hasClaudeRuntime()){
+      var local = readLocalState();
+      if(local) STATE = local;
+    }
+  }
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+  }
+
+  function genId(){
+    return 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+  }
+
+  function splitMinutes(total, n){
+    if(n<=0) return [];
+    var base = Math.floor(total/n);
+    var rem = total - base*n;
+    var out = [];
+    for(var i=0;i<n;i++){
+      var m = base;
+      if(rem>0){ m++; rem--; }
+      out.push(m);
+    }
+    return out;
+  }
+
+  function pickExcluding(pool, n, excludeIds){
+    var avail = pool.filter(function(i){ return excludeIds.indexOf(i.id) === -1; });
+    if(avail.length < n) avail = pool.slice();
+    return shuffle(avail).slice(0, n);
+  }
+
+  function pickTechDiverse(pool, excludeIds){
+    var avail = pool.filter(function(i){ return excludeIds.indexOf(i.id) === -1; });
+    if(avail.length < 2) avail = pool.slice();
+    avail = shuffle(avail);
+    for(var i=0;i<avail.length;i++){
+      for(var j=i+1;j<avail.length;j++){
+        if(avail[i].foco !== avail[j].foco) return [avail[i], avail[j]];
+      }
+    }
+    return avail.slice(0,2);
+  }
+
+  function selectedMaterials(){
+    return MATERIAL_KEYS.filter(function(k){
+      var el = $('mat-' + k);
+      return el && el.checked;
+    });
+  }
+
+  function selectedEdad(){
+    var checked = document.querySelector('input[name="edad"]:checked');
+    return checked ? checked.value : 'mixto';
+  }
+
+  function matAndAgeOK(materials, edadNum){
+    return function(item){
+      var matOk = item.mat.every(function(m){ return materials.indexOf(m) !== -1; });
+      var edadOk = edadNum === null || item.edadMin <= edadNum;
+      return matOk && edadOk;
+    };
+  }
+
+  function generateSession(dateStr, materials, edad){
+    var ageKey = AGE_INFO[edad] ? edad : 'mixto';
+    var ageInfo = AGE_INFO[ageKey];
+    var edadNum = ageKey === 'mixto' ? null : Number(ageKey);
+
+    var last2 = STATE.history.slice(0,2);
+    var recentWarmup = [];
+    var recentTech = [];
+    var recentMatch = [];
+    last2.forEach(function(s){
+      recentWarmup = recentWarmup.concat(s.warmupIds || []);
+      recentTech = recentTech.concat(s.techIds || []);
+      if(s.matchId) recentMatch.push(s.matchId);
+    });
+
+    var ok = matAndAgeOK(materials, edadNum);
+    var warmPool = BANK.warmup.filter(ok);
+    var techPool = BANK.tech.filter(ok);
+    var matchPool = BANK.match.filter(ok);
+
+    var chosenWarm = pickExcluding(warmPool, 2, recentWarmup);
+    var chosenTech = pickTechDiverse(techPool, recentTech);
+    var chosenMatchArr = pickExcluding(matchPool, 1, recentMatch);
+    var chosenMatch = chosenMatchArr[0] || null;
+
+    var warmMinutes = splitMinutes(ageInfo.warmMin, chosenWarm.length);
+    var warmup = chosenWarm.map(function(item, idx){
+      var copy = {}; for(var k in item) copy[k]=item[k];
+      copy.minutes = warmMinutes[idx];
+      return copy;
+    });
+    var techMinutes = splitMinutes(ageInfo.techMin, chosenTech.length);
+    var tecnica = chosenTech.map(function(item, idx){
+      var copy = {}; for(var k in item) copy[k]=item[k];
+      copy.minutes = techMinutes[idx];
+      return copy;
+    });
+    var partido = null;
+    if(chosenMatch){
+      partido = {}; for(var k2 in chosenMatch) partido[k2]=chosenMatch[k2];
+      partido.minutes = ageInfo.matchMin;
+    }
+
+    return {
+      id: genId(),
+      date: dateStr,
+      edad: ageKey,
+      edadLabel: ageInfo.label,
+      consejo: ageInfo.consejo,
+      warmMin: ageInfo.warmMin,
+      techMin: ageInfo.techMin,
+      matchMin: ageInfo.matchMin,
+      warmupIds: warmup.map(function(i){return i.id;}),
+      techIds: tecnica.map(function(i){return i.id;}),
+      matchId: partido ? partido.id : null,
+      warmup: warmup,
+      tecnica: tecnica,
+      partido: partido,
+      materials: materials.slice()
+    };
+  }
+
+  function formatDate(dateStr){
+    if(!dateStr) return '';
+    var d = new Date(dateStr + 'T12:00:00');
+    if(isNaN(d.getTime())) return dateStr;
+    return new Intl.DateTimeFormat('es-ES', { weekday:'long', day:'numeric', month:'long' }).format(d);
+  }
+
+  function updateDayLabel(){
+    var v = $('date-input').value;
+    $('day-label').textContent = v ? formatDate(v) : '—';
+  }
+
+  function materialTags(mat){
+    if(!mat.length) return '';
+    return '<span class="item-meta">' + mat.map(function(m){
+      return '<span class="tag">' + MATERIAL_LABEL[m] + '</span>';
+    }).join('') + '</span>';
+  }
+
+  var ICON_CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 9 12 15 17 9"/></svg>';
+
+  function phaseItemsHTML(items, showFoco){
+    return '<ul class="phase-items">' + items.map(function(it){
+      var focoTag = showFoco ? '<span class="tag tag-foco">' + FOCO_LABEL[it.foco] + '</span>' : '';
+      return '<li class="ex-item" data-ex-id="' + it.id + '" tabindex="0" role="button" aria-expanded="false">' +
+        '<div class="item-top"><strong>' + it.nombre + '</strong><span class="mono">' + it.minutes + ' min</span></div>' +
+        '<p class="item-desc">' + it.desc + '</p>' +
+        '<div class="item-meta">' + focoTag + it.mat.map(function(m){ return '<span class="tag">'+MATERIAL_LABEL[m]+'</span>'; }).join('') + '</div>' +
+        '<span class="toggle-hint">' + ICON_CHEVRON + '<span class="toggle-hint-text">Ver explicación completa</span></span>' +
+        '<div class="item-detail" hidden><p>' + it.detalle + '</p></div>' +
+        '</li>';
+    }).join('') + '</ul>';
+  }
+
+  function sessionCardHTML(session){
+    if(!session.warmup.length || !session.tecnica.length || !session.partido){
+      return '<div class="warn">No hay suficientes ejercicios disponibles para ese grupo de edad con el material marcado. Prueba a activar algún material más (por ejemplo conos o balones), o a elegir "Mixto (4-6)", y genera de nuevo.</div>';
+    }
+    var total = session.warmMin + session.techMin + session.matchMin;
+    return '<section class="session-card">' +
+      '<div class="session-head"><h2>Entreno del <time>' + formatDate(session.date) + '</time></h2>' +
+        '<span class="pill pill-blue">' + session.edadLabel + '</span>' +
+        '<span class="pill">' + total + ' min</span></div>' +
+      '<div class="coach-note"><strong>Consejo del entrenador: </strong>' + session.consejo + '</div>' +
+      '<div class="phase phase-warmup">' +
+        '<div class="phase-head">' + ICON_WARMUP + '<h3>Calentamiento · juegos</h3><span class="pill pill-gold">' + session.warmMin + ' min</span></div>' +
+        phaseItemsHTML(session.warmup, false) +
+      '</div>' +
+      '<div class="phase phase-tech">' +
+        '<div class="phase-head">' + ICON_TECH + '<h3>Ejercicios técnicos</h3><span class="pill pill-pitch">' + session.techMin + ' min</span></div>' +
+        phaseItemsHTML(session.tecnica, true) +
+      '</div>' +
+      '<div class="phase phase-match">' +
+        '<div class="phase-head">' + ICON_MATCH + '<h3>Partido</h3><span class="pill pill-red">' + session.matchMin + ' min</span></div>' +
+        phaseItemsHTML([session.partido], false) +
+      '</div>' +
+    '</section>';
+  }
+
+  function historySummary(entry){
+    var names = entry.warmup.map(function(i){return i.nombre;})
+      .concat(entry.tecnica.map(function(i){return i.nombre;}));
+    if(entry.partido) names.push(entry.partido.nombre);
+    return names.join(' · ');
+  }
+
+  function historyHTML(){
+    var head = '<div class="history-head"><h2>Historial de sesiones</h2><span class="count-pill">' + STATE.history.length + '</span></div>';
+    if(!STATE.history.length){
+      return '<section class="history">' + head + '<p class="history-empty">Todavía no hay entrenos guardados. Genera uno y pulsa «Guardar en historial» para que quede registrado y no se repita.</p></section>';
+    }
+    var items = STATE.history.map(function(entry){
+      var edadTag = entry.edadLabel ? '<span class="tag">' + entry.edadLabel + '</span>' : '';
+      return '<li class="history-item">' +
+        '<div>' +
+          '<div class="hi-date">' + formatDate(entry.date) + ' ' + edadTag + '</div>' +
+          '<div class="hi-summary">' + historySummary(entry) + '</div>' +
+        '</div>' +
+        '<button type="button" class="hi-del" data-action="delete" data-id="' + entry.id + '">Eliminar</button>' +
+      '</li>';
+    }).join('');
+    return '<section class="history">' + head + '<ul class="history-list">' + items + '</ul></section>';
+  }
+
+  function render(){
+    var html = '';
+    html += DRAFT ? sessionCardHTML(DRAFT) : '<p class="empty-hint">Pulsa «Generar entreno» para crear la sesión del día.</p>';
+    html += historyHTML();
+    $('results').innerHTML = html;
+  }
+
+  var toastTimer = null;
+  function showToast(msg, isWarn){
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.toggle('warn-toast', !!isWarn);
+    el.classList.add('show');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+  }
+
+  function handleGenerate(){
+    var materials = selectedMaterials();
+    var edad = selectedEdad();
+    var dateStr = $('date-input').value;
+    DRAFT = generateSession(dateStr, materials, edad);
+    render();
+  }
+
+  function buildFullDocument(){
+    var styleTag = document.querySelector('style').outerHTML;
+    var headerTag = document.querySelector('.topbar').outerHTML;
+    var controlsTag = $('controls').outerHTML;
+    var noteTag = document.querySelector('.note').outerHTML;
+    var scriptTag = $('app-logic').outerHTML;
+    var stateJson = JSON.stringify(STATE).replace(/</g, '\\u003c');
+    return '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' +
+      '<title>Entrenamiento Tudela F.S Debutantes</title>' +
+      styleTag +
+      '<link rel="preconnect" href="https://fonts.googleapis.com">' +
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">' +
+      '</head><body>' +
+      '<div id="app-shell">' +
+      headerTag + controlsTag +
+      '<main id="results" class="results"></main>' +
+      noteTag +
+      '</div>' +
+      '<div id="toast" role="status" aria-live="polite"></div>' +
+      '<script id="state-data" type="application/json">' + stateJson + '<\/script>' +
+      scriptTag +
+      '</body></html>';
+  }
+
+  function handleSave(){
+    if(!DRAFT || !DRAFT.warmup.length || !DRAFT.tecnica.length || !DRAFT.partido){
+      showToast('Genera un entreno completo antes de guardar.', true);
+      return;
+    }
+    var entry = DRAFT;
+    STATE.history.unshift(entry);
+    STATE.history = STATE.history.slice(0, 30);
+
+    if(!hasClaudeRuntime()){
+      if(writeLocalState()){
+        DRAFT = null;
+        render();
+        showToast('Guardado en este navegador.');
+      } else {
+        STATE.history.shift();
+        showToast('Este navegador no permite guardar el historial (modo privado o almacenamiento bloqueado).', true);
+      }
+      return;
+    }
+
+    Promise.resolve(window.claude.use('artifact')).then(function(artifact){
+      if(!artifact){
+        // Vista compartida sin permiso de escritura: al menos guarda en este dispositivo.
+        if(writeLocalState()){
+          DRAFT = null;
+          render();
+          showToast('Guardado en este dispositivo (esta vista no permite guardarlo para todos).');
+        } else {
+          STATE.history.shift();
+          showToast('Vista de solo lectura: no se puede guardar aquí.', true);
+        }
+        return;
+      }
+      var doc = buildFullDocument();
+      artifact.publish(doc).then(function(){
+        DRAFT = null;
+        render();
+        showToast('Guardado en el historial.');
+      }).catch(function(err){
+        STATE.history.shift();
+        showToast('No se pudo guardar: ' + (err && (err.code || err.message) || 'error'), true);
+      });
+    });
+  }
+
+  function handleDeleteHistory(id){
+    STATE.history = STATE.history.filter(function(e){ return e.id !== id; });
+    render();
+
+    if(!hasClaudeRuntime()){
+      writeLocalState();
+      return;
+    }
+
+    Promise.resolve(window.claude.use('artifact')).then(function(artifact){
+      if(!artifact){ writeLocalState(); return; }
+      artifact.publish(buildFullDocument()).catch(function(){ /* ignore */ });
+    });
+  }
+
+  function attachHandlers(){
+    $('btn-generate').addEventListener('click', handleGenerate);
+    $('btn-save').addEventListener('click', handleSave);
+    $('btn-print').addEventListener('click', function(){ window.print(); });
+
+    $('date-input').addEventListener('change', function(){
+      this.setAttribute('value', this.value);
+      updateDayLabel();
+    });
+
+    MATERIAL_KEYS.forEach(function(k){
+      var el = $('mat-' + k);
+      el.addEventListener('change', function(){
+        this.toggleAttribute('checked', this.checked);
+      });
+    });
+
+    AGE_KEYS.forEach(function(k){
+      var el = $('edad-' + k);
+      el.addEventListener('change', function(){
+        AGE_KEYS.forEach(function(k2){ $('edad-' + k2).removeAttribute('checked'); });
+        if(this.checked) this.setAttribute('checked', '');
+      });
+    });
+
+    $('results').addEventListener('click', function(e){
+      var delBtn = e.target.closest('[data-action="delete"]');
+      if(delBtn){ handleDeleteHistory(delBtn.getAttribute('data-id')); return; }
+      var exItem = e.target.closest('.ex-item');
+      if(exItem) toggleExercise(exItem);
+    });
+
+    $('results').addEventListener('keydown', function(e){
+      if(e.key !== 'Enter' && e.key !== ' ') return;
+      var exItem = e.target.closest('.ex-item');
+      if(!exItem) return;
+      e.preventDefault();
+      toggleExercise(exItem);
+    });
+  }
+
+  function toggleExercise(exItem){
+    var detail = exItem.querySelector('.item-detail');
+    var hint = exItem.querySelector('.toggle-hint-text');
+    var expanded = exItem.getAttribute('aria-expanded') === 'true';
+    exItem.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    detail.hidden = expanded;
+    if(hint) hint.textContent = expanded ? 'Ver explicación completa' : 'Ocultar explicación';
+  }
+
+  function boot(){
+    loadState();
+    attachHandlers();
+    var dateInput = $('date-input');
+    if(!dateInput.value){
+      var t = new Date();
+      var iso = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+      dateInput.value = iso;
+      dateInput.setAttribute('value', iso);
+    }
+    updateDayLabel();
+    handleGenerate();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>

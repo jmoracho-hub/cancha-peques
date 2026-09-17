@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Planificador de entrenos de futsal para el Tudela F.S. Debutantes: calentamiento, ejercicios tecnicos y partido, adaptado por categoria y edad.">
+<meta name="description" content="Planificador de entrenamientos de futbol sala para Tudela F.S. Debutantes.">
 <title>Entrenamiento Tudela F.S Debutantes</title>
 <style>
   :root{
@@ -373,15 +373,6 @@
         <label class="chip"><input type="radio" name="categoria" id="cat-juvenil" value="juvenil"> Juvenil (15-16)</label>
       </div>
     </fieldset>
-    <fieldset class="field age-field" id="subedad-field">
-      <legend>Edad exacta (prebenjamín)</legend>
-      <div class="chips">
-        <label class="chip"><input type="radio" name="edad" id="edad-4" value="4"> 4 años</label>
-        <label class="chip"><input type="radio" name="edad" id="edad-5" value="5"> 5 años</label>
-        <label class="chip"><input type="radio" name="edad" id="edad-6" value="6"> 6 años</label>
-        <label class="chip"><input type="radio" name="edad" id="edad-mixto" value="mixto" checked> Mixto (4-6)</label>
-      </div>
-    </fieldset>
     <fieldset class="field materials-field">
       <legend>Material disponible</legend>
       <div class="chips">
@@ -580,27 +571,6 @@
   var MATERIAL_LABEL = {conos:'Conos', balones:'Balones', petos:'Petos', aros:'Aros', picas:'Picas', porterias:'Porterías'};
   var MATERIAL_KEYS = ['conos','balones','petos','aros','picas','porterias'];
 
-  // reparto de los 60 minutos y consejo de metodología según el grupo de edad
-  var AGE_INFO = {
-    '4': {
-      label: '4 años', warmMin: 20, techMin: 15, matchMin: 25,
-      consejo: 'A los 4 años el balón es sobre todo un juguete: prioriza el juego libre y las tareas individuales (un balón por niño) frente al ejercicio dirigido. No corrijas el gesto técnico todavía, cada actividad debe durar 3-5 minutos como mucho, y evita las filas de espera: si hay que esperar turno, se desconectan.'
-    },
-    '5': {
-      label: '5 años', warmMin: 15, techMin: 25, matchMin: 20,
-      consejo: 'Con 5 años ya aguantan consignas de dos pasos ("controla y pasa") y tareas por parejas. Empieza a introducir el control y el pase con distancias cortas, sigue premiando la actitud y el esfuerzo por encima del resultado, y usa el partido final como su recompensa por haber currado en la parte técnica.'
-    },
-    '6': {
-      label: '6 años', warmMin: 15, techMin: 30, matchMin: 15,
-      consejo: 'A los 6 años puedes pedir algo más de precisión técnica e introducir conceptos simples como ocupar espacios libres o encadenar dos acciones (control + pase). Sigue siendo fútbol-juego: nada de charlas tácticas largas, la pizarra la dibujan corriendo en la pista.'
-    },
-    'mixto': {
-      label: 'Grupo mixto (4-6 años)', warmMin: 15, techMin: 30, matchMin: 15,
-      consejo: 'Con un grupo mixto, forma parejas heterogéneas (un mayor con un pequeño) en los ejercicios técnicos: el pequeño aprende imitando y el mayor aprende explicando, que también es aprendizaje. Vigila que las tareas elegidas no se queden cortas para los de 6 ni se les atraganten a los de 4.'
-    }
-  };
-  var AGE_KEYS = ['4','5','6','mixto'];
-
   // categorías oficiales de fútbol sala base, cada una con su propio banco de ejercicios
   var CATEGORIES = {
     prebenjamin: { label: 'Prebenjamín', ageRange: '4-6 años', bank: BANK },
@@ -612,9 +582,12 @@
   };
   var CATEGORY_KEYS = ['prebenjamin','benjamin','alevin','infantil','cadete','juvenil'];
 
-  // reparto de los 60 minutos y consejo de metodología para las categorías que no son prebenjamín
-  // (prebenjamín usa el desglose más fino de AGE_INFO por edad exacta, de 4 a 6 años)
+  // reparto de los 60 minutos y consejo de metodología para cada categoría
   var CATEGORY_INFO = {
+    prebenjamin: {
+      warmMin: 15, techMin: 30, matchMin: 15,
+      consejo: 'De 4 a 6 años el balón es sobre todo un juguete: prioriza el juego libre, las tareas individuales (un balón por niño) y sesiones cortas de 3-5 minutos por actividad. No corrijas el gesto técnico de forma estricta todavía. Si el grupo mezcla edades dentro de la categoría, forma parejas heterogéneas (un mayor con un pequeño): el pequeño aprende imitando y el mayor aprende explicando, que también es aprendizaje.'
+    },
     benjamin: {
       warmMin: 15, techMin: 30, matchMin: 15,
       consejo: 'En benjamín ya puedes corregir el gesto técnico con normalidad: control orientado, pase con las dos piernas, primeros regates. Sigue siendo fútbol-juego, pero el error ya es una oportunidad para aprender, no solo para animar. Introduce el 1 contra 1 formal y deja que el partido premie las conductas que has trabajado en la parte técnica.'
@@ -731,47 +704,24 @@
     });
   }
 
-  function selectedEdad(){
-    var checked = document.querySelector('input[name="edad"]:checked');
-    return checked ? checked.value : 'mixto';
-  }
-
   function selectedCategoria(){
     var checked = document.querySelector('input[name="categoria"]:checked');
     return (checked && CATEGORIES[checked.value]) ? checked.value : 'prebenjamin';
   }
 
-  function matAndAgeOK(materials, edadNum){
-    return function(item){
-      var matOk = item.mat.every(function(m){ return materials.indexOf(m) !== -1; });
-      var edadOk = edadNum === null || item.edadMin <= edadNum;
-      return matOk && edadOk;
-    };
+  function matOK(materials){
+    return function(item){ return item.mat.every(function(m){ return materials.indexOf(m) !== -1; }); };
   }
 
-  function generateSession(dateStr, materials, categoria, edad){
+  function generateSession(dateStr, materials, categoria){
     var catKey = CATEGORIES[categoria] ? categoria : 'prebenjamin';
     var bank = CATEGORIES[catKey].bank;
-
-    var sessionInfo; // {label, consejo, warmMin, techMin, matchMin}
-    var edadNum = null;
-    if(catKey === 'prebenjamin'){
-      var ageKey = AGE_INFO[edad] ? edad : 'mixto';
-      var ageInfo = AGE_INFO[ageKey];
-      edadNum = ageKey === 'mixto' ? null : Number(ageKey);
-      sessionInfo = {
-        label: 'Prebenjamín · ' + ageInfo.label,
-        consejo: ageInfo.consejo,
-        warmMin: ageInfo.warmMin, techMin: ageInfo.techMin, matchMin: ageInfo.matchMin
-      };
-    } else {
-      var catInfo = CATEGORY_INFO[catKey];
-      sessionInfo = {
-        label: CATEGORIES[catKey].label + ' (' + CATEGORIES[catKey].ageRange + ')',
-        consejo: catInfo.consejo,
-        warmMin: catInfo.warmMin, techMin: catInfo.techMin, matchMin: catInfo.matchMin
-      };
-    }
+    var catInfo = CATEGORY_INFO[catKey];
+    var sessionInfo = {
+      label: CATEGORIES[catKey].label + ' (' + CATEGORIES[catKey].ageRange + ')',
+      consejo: catInfo.consejo,
+      warmMin: catInfo.warmMin, techMin: catInfo.techMin, matchMin: catInfo.matchMin
+    };
 
     var last2 = STATE.history.slice(0,2).filter(function(s){ return (s.categoria || 'prebenjamin') === catKey; });
     var recentWarmup = [];
@@ -783,7 +733,7 @@
       if(s.matchId) recentMatch.push(s.matchId);
     });
 
-    var ok = matAndAgeOK(materials, edadNum);
+    var ok = matOK(materials);
     var warmPool = bank.warmup.filter(ok);
     var techPool = bank.tech.filter(ok);
     var matchPool = bank.match.filter(ok);
@@ -815,7 +765,6 @@
       id: genId(),
       date: dateStr,
       categoria: catKey,
-      edad: catKey === 'prebenjamin' ? (AGE_INFO[edad] ? edad : 'mixto') : null,
       edadLabel: sessionInfo.label,
       consejo: sessionInfo.consejo,
       warmMin: sessionInfo.warmMin,
@@ -935,9 +884,8 @@
   function handleGenerate(){
     var materials = selectedMaterials();
     var categoria = selectedCategoria();
-    var edad = selectedEdad();
     var dateStr = $('date-input').value;
-    DRAFT = generateSession(dateStr, materials, categoria, edad);
+    DRAFT = generateSession(dateStr, materials, categoria);
     render();
   }
 
@@ -1044,20 +992,11 @@
       });
     });
 
-    AGE_KEYS.forEach(function(k){
-      var el = $('edad-' + k);
-      el.addEventListener('change', function(){
-        AGE_KEYS.forEach(function(k2){ $('edad-' + k2).removeAttribute('checked'); });
-        if(this.checked) this.setAttribute('checked', '');
-      });
-    });
-
     CATEGORY_KEYS.forEach(function(k){
       var el = $('cat-' + k);
       el.addEventListener('change', function(){
         CATEGORY_KEYS.forEach(function(k2){ $('cat-' + k2).removeAttribute('checked'); });
         if(this.checked) this.setAttribute('checked', '');
-        updateSubedadVisibility();
       });
     });
 
@@ -1077,10 +1016,6 @@
     });
   }
 
-  function updateSubedadVisibility(){
-    $('subedad-field').hidden = selectedCategoria() !== 'prebenjamin';
-  }
-
   function toggleExercise(exItem){
     var detail = exItem.querySelector('.item-detail');
     var hint = exItem.querySelector('.toggle-hint-text');
@@ -1093,7 +1028,6 @@
   function boot(){
     loadState();
     attachHandlers();
-    updateSubedadVisibility();
     var dateInput = $('date-input');
     if(!dateInput.value){
       var t = new Date();

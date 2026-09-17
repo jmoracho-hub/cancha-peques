@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Planificador de entrenos de futsal para el Tudela F.S. Debutantes: calentamiento, ejercicios tecnicos y partido, para peques de 4-6 anios.">
+<meta name="description" content="Planificador de entrenos de futsal para el Tudela F.S. Debutantes: calentamiento, ejercicios tecnicos y partido, adaptado por categoria y edad.">
 <title>Entrenamiento Tudela F.S Debutantes</title>
 <style>
   :root{
@@ -362,8 +362,19 @@
       <input type="date" id="date-input" value="">
       <p id="day-label" class="day-label">—</p>
     </div>
-    <fieldset class="field age-field">
-      <legend>Grupo de edad</legend>
+    <fieldset class="field categoria-field">
+      <legend>Categoría</legend>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="categoria" id="cat-prebenjamin" value="prebenjamin" checked> Prebenjamín (4-6)</label>
+        <label class="chip"><input type="radio" name="categoria" id="cat-benjamin" value="benjamin"> Benjamín (7-8)</label>
+        <label class="chip"><input type="radio" name="categoria" id="cat-alevin" value="alevin"> Alevín (9-10)</label>
+        <label class="chip"><input type="radio" name="categoria" id="cat-infantil" value="infantil"> Infantil (11-12)</label>
+        <label class="chip"><input type="radio" name="categoria" id="cat-cadete" value="cadete"> Cadete (13-14)</label>
+        <label class="chip"><input type="radio" name="categoria" id="cat-juvenil" value="juvenil"> Juvenil (15-16)</label>
+      </div>
+    </fieldset>
+    <fieldset class="field age-field" id="subedad-field">
+      <legend>Edad exacta (prebenjamín)</legend>
       <div class="chips">
         <label class="chip"><input type="radio" name="edad" id="edad-4" value="4"> 4 años</label>
         <label class="chip"><input type="radio" name="edad" id="edad-5" value="5"> 5 años</label>
@@ -445,7 +456,127 @@
     ]
   };
 
-  var FOCO_LABEL = {colocacion:'Colocación', pases:'Pases', conduccion:'Conducción'};
+  var BANK_BENJAMIN = {
+    warmup: [
+      {id:'bjw1', nombre:'Escalera de coordinación', desc:'Pasos rápidos entre picas en el suelo simulando una escalera, primero sin balón y después conduciéndolo.', mat:['picas'], detalle:'Coloca picas en el suelo formando una escalera de coordinación (o dibuja los cuadros con tiza). Cada jugador pasa haciendo distintos apoyos (un pie por cuadro, dos pies, cruzado) y en la segunda vuelta lo repite conduciendo el balón con los pies. Es la base de la coordinación específica que necesitarán para los gestos técnicos de esta etapa. Consejo: prioriza la ejecución correcta sobre la velocidad, ya habrá tiempo de acelerar cuando dominen el patrón.'},
+      {id:'bjw2', nombre:'Rondo de activación', desc:'Un grupo pequeño en círculo mantiene el balón con toque libre mientras uno o dos compañeros intentan interceptarlo en el centro.', mat:['balones'], detalle:'Forma grupos de 5-6 con un balón, uno o dos jugadores dentro del círculo intentando tocar el balón mientras el resto se lo pasa con toque libre (uno o dos toques). Rota a quien está dentro cada 45-60 segundos. Es un calentamiento con balón que ya empieza a exigir atención y comunicación entre compañeros. Consejo: si el grupo es muy justo tocando el balón, permite tres toques para que no se frustren.'},
+      {id:'bjw3', nombre:'Pillapilla con balón', desc:'Todos conducen su balón por la pista mientras intentan tocar el balón de los demás sin perder el suyo.', mat:['balones','conos'], detalle:'Cada jugador con su balón se mueve libremente por la pista; el objetivo es tocar el balón de un compañero (sacándolo un poco de su control) sin que le quiten el suyo propio. Quien pierde el control de su balón sigue jugando igualmente, solo lo recupera y continúa. Es un juego exigente de control y visión periférica a la vez. Consejo: delimita bien el espacio, con más jugadores conviene reducirlo para que haya más contacto con el juego.'},
+      {id:'bjw4', nombre:'Circuito de reacción', desc:'Salidas rápidas a distintas señales (visual, sonora, nombre) desde posiciones variadas.', mat:['conos'], detalle:'Coloca a los jugadores en distintas posiciones de partida (de pie, sentados, de espaldas) y da salidas a una señal variada: un silbido, levantar un brazo, decir un color. Cada salida es una carrera corta de 5-8 metros hasta un cono. Trabaja el tiempo de reacción, clave para el fútbol sala por los espacios reducidos. Consejo: varía el tipo de señal en cada serie para que no anticipen por costumbre.'},
+      {id:'bjw5', nombre:'Relevos con conducción', desc:'Por equipos, conducir el balón hasta un cono con cambios de dirección y volver para dar el relevo.', mat:['balones','conos'], detalle:'Divide en equipos de 3-4 en fila. Cada corredor conduce el balón haciendo un recorrido con 2-3 cambios de dirección marcados por conos, y al volver dando el relevo al siguiente. Cronometra alguna ronda como reto. Consejo: exige que toquen el balón con las dos piernas durante el recorrido, no solo con la dominante.'}
+    ],
+    tech: [
+      {id:'bjt1', foco:'colocacion', nombre:'Control orientado', desc:'Recibir el balón y con el primer toque orientarlo ya hacia el lado donde se quiere jugar.', mat:['conos','balones'], detalle:'Coloca a los jugadores en parejas o pequeños grupos; uno pasa y el otro recibe con el primer toque orientado hacia un cono o dirección marcada, sin pararlo pegado al pie. Es el gesto técnico más importante de esta etapa: jugar de cara, no de espaldas. Corrige la posición del cuerpo antes de que llegue el balón, deben mirar antes de recibir. Consejo: marca con un cono el lado hacia el que deben orientar cada vez, así ves de un vistazo quién lo hace bien.'},
+      {id:'bjt2', foco:'pases', nombre:'Pase a un toque en cuadrado', desc:'Cuatro jugadores en las esquinas de un cuadrado se pasan el balón a un solo toque, cambiando de lado.', mat:['balones','conos'], detalle:'Marca un cuadrado de unos 6x6 metros con un jugador en cada esquina y un balón en juego. El pase se da siempre a un toque, sin parar el balón, intentando mantener el ritmo sin perder el control. Añade un segundo balón cuando lo dominen para multiplicar la exigencia. Consejo: si se les escapa mucho el balón, permite dos toques y ve exigiendo el toque único poco a poco.'},
+      {id:'bjt3', foco:'conduccion', nombre:'Conducción con cambio de ritmo', desc:'Conducir el balón alternando tramos rápidos y lentos entre conos, sin perder el control.', mat:['balones','conos'], detalle:'Marca un recorrido con conos y pide que lo hagan conduciendo el balón, acelerando en los tramos rectos y frenando (parando el balón con la planta) en los conos marcados de otro color. El cambio de ritmo es una de las armas técnicas más útiles en espacios reducidos. Consejo: exagera tú el gesto de frenada con la planta como modelo, es un gesto que les cuesta automatizar.'},
+      {id:'bjt4', foco:'conduccion', nombre:'1 contra 1 a portería', desc:'Duelo individual desde media pista: conducir, regatear al defensor y rematar a portería.', mat:['balones','porterias'], detalle:'Coloca un atacante y un defensor enfrentados a unos 10 metros de la portería. El atacante conduce, intenta un regate simple (cambio de ritmo o de dirección) para superar al defensor y remata. Rota después de cada acción. Es de los ejercicios más formativos de esta edad: decisión, técnica y finalización en un solo gesto. Consejo: si el defensor gana siempre, dale ventaja de posición al atacante para que no se frustre.'},
+      {id:'bjt5', foco:'remate', nombre:'Remate tras pase', desc:'Recibir un pase de un compañero y rematar a portería sin pararlo del todo.', mat:['balones','porterias'], detalle:'Un jugador pasa desde un lateral y el que recibe remata a portería intentando no dar más de un toque antes de chutar. Cambia el ángulo del pase en cada ronda (desde la derecha, desde la izquierda, desde atrás) para que aprendan a rematar en distintas posiciones. Consejo: valora también los remates que salen desviados pero con buena forma técnica, no solo los que acaban en gol.'},
+      {id:'bjt6', foco:'pases', nombre:'Rondo 4 contra 1', desc:'Cuatro jugadores mantienen la posesión en un espacio reducido mientras uno defiende en el centro.', mat:['balones','conos'], detalle:'Marca un espacio de unos 8x8 metros con 4 atacantes en las esquinas o el perímetro y 1 defensor en el centro que intenta interceptar o tocar el balón. Si lo consigue, cambia con quien dio el último pase. Introduce el concepto de mantener el balón bajo presión, base de todo el fútbol sala posterior. Consejo: exige que hablen entre ellos avisando de si el defensor viene o está libre el compañero.'}
+    ],
+    match: [
+      {id:'bjm1', nombre:'Partido con gol validado tras pase', desc:'El gol solo cuenta si antes hubo al menos un pase de un compañero en la jugada.', mat:['balones','porterias'], detalle:'Juega un partido normal pero solo se valida el gol si en la jugada previa ha habido como mínimo un pase entre compañeros (evita el gol tras robo y disparo individual directo). Fomenta que busquen jugar en equipo en vez de ir solos hacia la portería. Consejo: no lo apliques de forma estricta con silbato, coméntalo con humor cuando pase para que lo entiendan jugando.'},
+      {id:'bjm2', nombre:'Partido 1 contra 1 más apoyo', desc:'Duelos de 2 contra 1 rotativos dentro de un espacio reducido con portería pequeña.', mat:['balones','conos'], detalle:'Divide la pista en 2-3 espacios pequeños con una portería mini en cada uno. En cada espacio se juega 2 contra 1, rotando el defensor cada gol o cada minuto. Multiplica los duelos individuales y las decisiones de pase de apoyo frente al 1 contra 1. Consejo: cambia también a los atacantes de espacio de vez en cuando para que no siempre jueguen con el mismo compañero.'},
+      {id:'bjm3', nombre:'Partido libre con corrección', desc:'Partido normal en el que el entrenador para brevemente para corregir un concepto puntual y sigue.', mat:['balones','porterias','petos'], detalle:'Juega un partido con las reglas habituales, pero permítete parar el juego 10-15 segundos cuando veas una situación clara para corregir (un control mal orientado, no mirar antes de recibir) y que lo repitan una vez antes de continuar. Es el momento de aplicar en juego real lo trabajado en la parte técnica. Consejo: no pares más de 3-4 veces en todo el partido, o perderán el ritmo y la diversión.'},
+      {id:'bjm4', nombre:'Partido con porteros rotativos', desc:'Partido normal cambiando de portero cada pocos minutos para que todos prueben esa posición.', mat:['balones','porterias'], detalle:'Juega un partido normal estableciendo turnos fijos de portero (por ejemplo, 3-4 minutos cada uno) anunciados antes de empezar. A esta edad es importante que todos pasen por la portería, forma parte de entender el juego completo. Consejo: dales alguna indicación básica de colocación en la portería antes de su turno, no hace falta un entreno específico todavía.'}
+    ]
+  };
+
+  var BANK_ALEVIN = {
+    warmup: [
+      {id:'alw1', nombre:'Activación con desplazamientos', desc:'Movilidad articular seguida de desplazamientos laterales, skipping y carrera con cambios de dirección.', mat:[], detalle:'Dedica 3-4 minutos a movilidad de tobillos, rodillas y cadera, y sigue con desplazamientos laterales, skipping y carreras cortas con cambio de dirección a la señal. A esta edad conviene empezar a estructurar el calentamiento como lo haría un entreno adulto, aunque en formato de juego. Consejo: convierte cada ejercicio en un reto contra el compañero de al lado para que no se haga monótono.'},
+      {id:'alw2', nombre:'Rondo de posesión 5 contra 2', desc:'Cinco jugadores mantienen el balón en un espacio reducido frente a dos defensores que presionan.', mat:['balones','conos'], detalle:'Marca un espacio de unos 10x10 metros con 5 atacantes en el perímetro y 2 defensores dentro que presionan de verdad para robar. Si roban, cambian con los dos últimos que perdieron el balón. Introduce presión real como calentamiento específico de la sesión. Consejo: limita a dos toques para que la circulación sea rápida y realista.'},
+      {id:'alw3', nombre:'Circuito de velocidad de reacción', desc:'Series cortas de sprint con balón partiendo de distintas posiciones y a distintas señales.', mat:['balones','conos'], detalle:'Monta un circuito de 10-15 metros con salidas variadas (de espaldas, sentado, con balón parado al lado) y a la señal deben salir conduciendo el balón lo más rápido posible hasta un cono. Trabaja la velocidad de reacción aplicada directamente con balón, no solo carrera libre. Consejo: deja descanso suficiente entre series, la calidad de la salida importa más que la cantidad de repeticiones.'},
+      {id:'alw4', nombre:'Posesión en espacio reducido', desc:'Juego de 4 contra 4 sin porterías, solo manteniendo el balón en un espacio marcado.', mat:['balones','conos','petos'], detalle:'Marca un rectángulo pequeño y juega 4 contra 4 (o similar) sin porterías, el objetivo es sumar el mayor número de pases seguidos posible. Es un calentamiento que ya mete ritmo de partido y toma de decisiones bajo presión. Consejo: pon un marcador de pases en voz alta, la competición por superar la racha anterior engancha mucho a esta edad.'},
+      {id:'alw5', nombre:'Pillapilla por parejas con conducción', desc:'Por parejas, uno conduce el balón intentando escapar mientras el otro intenta robárselo.', mat:['balones','conos'], detalle:'Por parejas de nivel similar, uno conduce el balón por un espacio delimitado intentando protegerlo del compañero, que intenta robárselo sin hacer falta. Cambian de rol cada 30-40 segundos. Es un calentamiento competitivo que activa el ritmo de partido desde el primer minuto. Consejo: emparéjalos por nivel similar para que el duelo sea real y motivador para ambos.'}
+    ],
+    tech: [
+      {id:'alt1', foco:'pases', nombre:'Pase y control a un toque', desc:'Circuito de pases donde cada jugador debe controlar y devolver el balón en el menor número de toques posible.', mat:['balones','conos'], detalle:'Organiza grupos de 3-4 en movimiento (no estáticos) que se van pasando el balón exigiendo un control orientado y devolución rápida, idealmente a uno o dos toques. Incorpora movimiento constante de quien no tiene el balón para buscar ángulos de pase. Consejo: para el ejercicio y pide que enseñen con el pie dónde han controlado el balón, ayuda a que sean conscientes del gesto.'},
+      {id:'alt2', foco:'colocacion', nombre:'Cambio de orientación', desc:'Mover el balón de un lado de la pista a otro con dos o tres pases mientras el resto del equipo se reposiciona.', mat:['balones','conos'], detalle:'Divide la pista en dos mitades imaginarias con jugadores repartidos en ambas. El equipo con balón debe cambiarlo de lado con 2-3 pases mientras los compañeros del lado contrario se preparan para recibir. Introduce la idea de que el balón viaja más rápido que el jugador. Consejo: prohíbe temporalmente el pase directo al lado contrario para forzar que usen los pases intermedios.'},
+      {id:'alt3', foco:'conduccion', nombre:'Conducción protegiendo balón', desc:'Conducir el balón bajo presión de un defensor, usando el cuerpo para proteger el balón del rival.', mat:['balones','conos'], detalle:'Por parejas, un atacante conduce el balón dentro de un espacio reducido mientras un defensor presiona sin poder hacer falta; el atacante debe interponer el cuerpo entre el balón y el rival. Es la base técnica para jugar bajo presión, constante en el fútbol sala. Consejo: recuérdales que el cuerpo protege, pero el balón siempre tiene que quedar a un toque de distancia, ni muy pegado ni muy lejos.'},
+      {id:'alt4', foco:'remate', nombre:'Remate con ambas piernas', desc:'Series de remate a portería alternando pierna dominante y no dominante desde distintas posiciones.', mat:['balones','porterias'], detalle:'Organiza series de remate desde varias posiciones frente a portería, alternando obligatoriamente pierna buena y mala en tandas seguidas. A esta edad conviene insistir en la bilateralidad antes de que se asiente el hábito de usar solo una pierna. Consejo: no valores solo si entra el gol, fíjate en si el gesto con la pierna menos hábil está mejorando sesión a sesión.'},
+      {id:'alt5', foco:'tactica', nombre:'Rondo 4 contra 2', desc:'Cuatro atacantes mantienen la posesión frente a dos defensores que presionan activamente para robar.', mat:['balones','conos'], detalle:'En un espacio de unos 10x10 metros, 4 atacantes mantienen el balón frente a 2 defensores que presionan de verdad. Es el primer rondo con superioridad reducida (4v2 en vez de 4v1), exige más calidad de pase y apoyos. Consejo: pide a los atacantes que abran bien el espacio, ocupando las esquinas del cuadrado, no que se amontonen cerca del balón.'},
+      {id:'alt6', foco:'tactica', nombre:'Transición rápida', desc:'Tras recuperar el balón, atacar hacia portería en menos de 5 segundos antes de que el rival se reorganice.', mat:['balones','porterias','petos'], detalle:'Enfrenta a dos grupos: uno defiende y, en el momento que recupera el balón (interceptación o robo), dispone de 5 segundos para atacar y rematar antes de que suene tu silbato. Introduce el concepto de transición rápida, clave táctica del fútbol sala moderno. Consejo: cuenta tú en voz alta los segundos, ayuda a que interioricen la urgencia sin necesidad de explicártelo mucho.'}
+    ],
+    match: [
+      {id:'alm1', nombre:'Partido con sistema 1-2-1', desc:'Partido introduciendo posiciones de referencia: un cierre, dos alas y un pívot.', mat:['balones','porterias','petos'], detalle:'Explica de forma sencilla las cuatro posiciones básicas del sistema 1-2-1 (cierre atrás, dos alas en los costados, pívot arriba) y asígnalas antes de empezar el partido. No exijas que lo mantengan de forma rígida, es solo una referencia inicial de ocupación del espacio. Consejo: para el partido un par de veces para preguntar \'¿dónde tienes que estar tú ahora?\' en vez de decírselo directamente.'},
+      {id:'alm2', nombre:'Partido con pressing tras pérdida', desc:'Al perder el balón, el equipo dispone de 5 segundos para presionar e intentar recuperarlo cerca de donde lo perdió.', mat:['balones','porterias','petos'], detalle:'Juega un partido normal marcando la norma de que, nada más perder el balón, ese equipo debe presionar con intensidad durante 5 segundos antes de replegarse. Pasado ese tiempo, pueden organizarse en defensa normal. Trabaja el hábito de reacción inmediata a la pérdida, muy valorado en el fútbol sala de formación. Consejo: si un equipo no presiona, para el juego y hazles repetir la jugada desde la pérdida.'},
+      {id:'alm3', nombre:'Partido de posesión aplicada', desc:'Partido normal donde cada racha de 5 pases seguidos suma un punto extra al marcador.', mat:['balones','porterias','petos'], detalle:'Juega un partido con las reglas habituales, pero suma un punto adicional al equipo cada vez que completa una racha de 5 pases seguidos sin perder el balón, además de los goles normales. Fomenta valorar la posesión con sentido, no solo el resultado final. Consejo: anuncia en voz alta la cuenta de pases, genera tensión positiva y ayuda a que cuenten ellos mismos.'},
+      {id:'alm4', nombre:'Partido libre con corrección táctica', desc:'Partido normal parando puntualmente para corregir decisiones de posicionamiento o de pase.', mat:['balones','porterias','petos'], detalle:'Juega con normalidad, pero aprovecha para detener el juego brevemente cuando veas una decisión táctica mejorable (mal apoyo, no cambiar de orientación) y haz que repitan la jugada aplicando la corrección. Es el cierre natural de una sesión centrada en conceptos de equipo. Consejo: felicita en voz alta cuando apliquen bien algo trabajado en la parte técnica, refuerza el aprendizaje mejor que la corrección en sí.'}
+    ]
+  };
+
+  var BANK_INFANTIL = {
+    warmup: [
+      {id:'inw1', nombre:'Activación física completa', desc:'Movilidad articular, activación muscular y series cortas de velocidad antes de empezar la sesión.', mat:['conos'], detalle:'Estructura el calentamiento en tres bloques: movilidad articular (2-3 min), activación con desplazamientos multidireccionales (3-4 min) y 2-3 series cortas de velocidad máxima de 10-15 metros. A esta edad el calentamiento empieza a tener entidad física propia, no solo lúdica. Consejo: incorpora balón en el último bloque para no perder tiempo de contacto con él.'},
+      {id:'inw2', nombre:'Rondo de posesión con presión real', desc:'Seis atacantes mantienen el balón frente a tres defensores que presionan con intensidad de partido.', mat:['balones','conos'], detalle:'En un espacio de unos 12x12 metros, 6 jugadores mantienen el balón frente a 3 defensores que presionan a máxima intensidad, con cambios cuando se produce el robo. La proporción 6 contra 3 obliga a una calidad de pase y desmarque más exigente que en categorías anteriores. Consejo: limita el número de toques (uno o dos) para que la exigencia sea real.'},
+      {id:'inw3', nombre:'Circuito de agilidad', desc:'Cambios de dirección a máxima velocidad entre conos, con y sin balón.', mat:['balones','conos'], detalle:'Monta un circuito en forma de zigzag o estrella con conos y hazlo primero sin balón a máxima intensidad, y después conduciendo el balón, comparando los tiempos. Trabaja la agilidad específica que necesitan en los espacios reducidos del fútbol sala. Consejo: deja descanso completo entre repeticiones, la calidad del cambio de dirección cae mucho con fatiga acumulada.'},
+      {id:'inw4', nombre:'Posesión con porterías pequeñas', desc:'Juego de 4 contra 4 con dos porterías pequeñas en los extremos, sumando puntos por posesión y por gol.', mat:['balones','conos'], detalle:'Coloca dos porterías pequeñas (conos separados) en los extremos de un espacio reducido y juega 4 contra 4 combinando el objetivo de mantener el balón con el de buscar gol. Es un calentamiento ya muy cercano al juego real de la categoría. Consejo: anímales a decidir rápido entre mantener la posesión o buscar la finalización según el momento del juego.'},
+      {id:'inw5', nombre:'Activación portero-jugadores', desc:'Bloque breve de activación específica para el portero (reflejos, salidas) en paralelo al resto del grupo.', mat:['balones'], detalle:'Mientras el grupo hace la activación general, dedica 5 minutos aparte al portero o porteros con ejercicios de reflejos (paradas cortas a distancia), salidas a los pies y colocación básica. A esta edad conviene empezar a dar contenido específico a la posición. Consejo: si tienes varios porteros, hazlo por turnos para no descuidar su participación en el resto de la sesión.'}
+    ],
+    tech: [
+      {id:'int1', foco:'colocacion', nombre:'Recepción orientada bajo presión', desc:'Controlar el balón con un defensor cerca, orientando el primer toque hacia el espacio libre.', mat:['balones','conos'], detalle:'Por tríos: un pasador, un receptor y un defensor semiactivo que presiona sin robar con contacto. El receptor debe controlar orientando el primer toque hacia el lado contrario al defensor. Es la consolidación técnica del control orientado trabajado en categorías anteriores, ahora con oposición real. Consejo: sube la intensidad del defensor progresivamente en la misma sesión según vayan dominando el gesto.'},
+      {id:'int2', foco:'pases', nombre:'Pase largo y cambio de orientación', desc:'Pases de media-larga distancia para cambiar el juego de un lado a otro de la pista con precisión.', mat:['balones','conos'], detalle:'Coloca a los jugadores en los extremos de la pista y trabaja el pase largo raso, buscando precisión en la recepción del compañero. Alterna con secuencias donde deben decidir entre pase corto o cambio de orientación según la posición del defensor imaginario. Consejo: prioriza siempre la precisión sobre la potencia, un pase largo mal dado pierde la posesión igual que un mal control.'},
+      {id:'int3', foco:'remate', nombre:'Remate de volea o media distancia', desc:'Finalización a portería sin control previo, golpeando el balón que llega por alto o a media altura.', mat:['balones','porterias'], detalle:'Un compañero lanza o pasa el balón por alto o a media altura y el rematador debe golpear sin controlar, ajustando el cuerpo al vuelo del balón. Es un gesto técnico más avanzado que exige buena coordinación óculo-pédica. Consejo: empieza con balones más lentos y sube la velocidad del envío según vayan cogiendo el gesto.'},
+      {id:'int4', foco:'tactica', nombre:'1 contra 1 defensivo', desc:'Trabajo específico de la posición defensiva: no entrar de cara, achicar espacios y forzar hacia fuera.', mat:['balones','conos'], detalle:'Por parejas, el defensor debe practicar la posición correcta (ligeramente de perfil, sin lanzarse de cara) para forzar al atacante hacia la banda o hacia una zona de menor peligro, sin necesidad de robar el balón, solo de contener. Es contenido específico de esta etapa: la defensa deja de ser solo intentar robar, ahora es también posicional. Consejo: premia las contenciones bien hechas igual que premiarías un robo de balón.'},
+      {id:'int5', foco:'tactica', nombre:'Desmarques de ruptura y apoyo', desc:'Trabajar los dos tipos de desmarque: al espacio (ruptura) y al balón (apoyo), según la situación.', mat:['balones','conos'], detalle:'Con un jugador de balón y dos o tres compañeros sin balón, practica que unos busquen el desmarque de ruptura (al espacio, para recibir en profundidad) y otros el de apoyo (acercarse al balón para facilitar el pase), alternando roles. Introduce la lectura táctica de cuándo conviene cada tipo de desmarque. Consejo: para el ejercicio en el momento justo y pregunta \'¿qué desmarque tocaba ahí?\' para que razonen la decisión.'},
+      {id:'int6', foco:'tactica', nombre:'Superioridad 5 contra 3 con finalización', desc:'Juego de posesión con superioridad numérica que termina siempre en remate a portería.', mat:['balones','porterias','conos'], detalle:'En medio campo, 5 atacantes contra 3 defensores buscan progresar y finalizar a portería aprovechando la superioridad numérica, con límite de tiempo por posesión para forzar la decisión. Conecta el trabajo de rondo con la finalización real, cerrando el ciclo técnico-táctico. Consejo: si los atacantes tardan demasiado en decidir, añade un límite de toques totales antes de disparar.'}
+    ],
+    match: [
+      {id:'inm1', nombre:'Partido con sistema 1-2-1', desc:'Partido aplicando el sistema 1-2-1 con roles algo más definidos que en categorías anteriores.', mat:['balones','porterias','petos'], detalle:'Juega con el sistema 1-2-1 asignado desde el inicio, pidiendo que mantengan referencias de posición sin ser demasiado estrictos. A esta edad ya pueden entender por qué se ocupa cada zona, no solo memorizar dónde colocarse. Consejo: explica brevemente el porqué de cada posición antes de empezar, la comprensión mejora la ejecución.'},
+      {id:'inm2', nombre:'Partido de contragolpe', desc:'Partido con énfasis en la transición rápida tras recuperar el balón, buscando la finalización en pocos pases.', mat:['balones','porterias','petos'], detalle:'Juega un partido normal destacando y premiando (verbalmente) las transiciones rápidas tras robo, buscando llegar a portería en 3-4 pases como máximo. Trabaja la idea de contragolpe organizado, no solo carrera individual. Consejo: si un equipo recupera y no sale rápido, para el juego y pregúntales qué opción de contragolpe tenían.'},
+      {id:'inm3', nombre:'Partido con ABP trabajadas', desc:'Partido incluyendo saques de banda y de esquina ensayados con una jugada simple predefinida.', mat:['balones','porterias','petos'], detalle:'Antes del partido, define con cada equipo una jugada sencilla para el saque de banda cerca de portería contraria (por ejemplo, pared con el jugador más cercano). Durante el partido, cuando se dé esa situación, deben intentar ejecutarla. Introduce el concepto de acción a balón parado trabajada, algo nuevo en esta etapa. Consejo: no compliques la jugada ensayada, cuanto más simple, más fácil de ejecutar bajo la presión del partido real.'},
+      {id:'inm4', nombre:'Partido libre con corrección de sistema', desc:'Partido normal parando para corregir la ocupación de espacios según el sistema asignado.', mat:['balones','porterias','petos'], detalle:'Juega con normalidad y para el juego cuando detectes que el sistema se ha desordenado (todos amontonados en una zona, por ejemplo) para reubicar y explicar brevemente. Es el cierre lógico de una sesión centrada en la organización posicional del equipo. Consejo: usa imágenes sencillas (\'sois una cometa\', \'abrid como un abanico\') para que la idea espacial se quede mejor que una explicación técnica.'}
+    ]
+  };
+
+  var BANK_CADETE = {
+    warmup: [
+      {id:'cdw1', nombre:'Activación con series de sprint', desc:'Movilidad, activación neuromuscular y series cortas de sprint a máxima intensidad.', mat:[], detalle:'Realiza movilidad articular dinámica (3 min), activación con multisaltos y desplazamientos (4 min) y 3-4 series de sprint de 10-15 metros con recuperación completa. El calentamiento en esta etapa debe preparar de verdad para la intensidad física del entreno que viene después. Consejo: no metas balón en las series de sprint puro, ya habrá tiempo de combinarlo después; aquí el objetivo es activar al máximo.'},
+      {id:'cdw2', nombre:'Rondo de posesión con presión intensa', desc:'Seis atacantes frente a cuatro defensores en un espacio reducido, presión a máxima intensidad.', mat:['balones','conos'], detalle:'En un espacio de unos 12x12 metros, 6 jugadores mantienen el balón frente a 4 defensores que presionan con intensidad de partido real. La proporción más ajustada (6 contra 4) exige un nivel técnico y de decisión mucho más alto que en categorías anteriores. Consejo: limita a uno o dos toques y cronometra rachas, generando competición interna por superar el tiempo de posesión anterior.'},
+      {id:'cdw3', nombre:'Circuito de agilidad a máxima intensidad', desc:'Cambios de dirección explosivos con balón, simulando situaciones reales de duelo.', mat:['balones','conos'], detalle:'Diseña un circuito exigente con cambios de dirección a 180º y aceleraciones cortas, siempre con balón, simulando la necesidad de desmarcarse o encarar a un defensor. Trabaja la agilidad específica al nivel de exigencia física que esta categoría empieza a requerir. Consejo: controla el volumen total, a esta edad la calidad de la ejecución cae rápido si acumulas demasiadas repeticiones seguidas.'},
+      {id:'cdw4', nombre:'Posesión con transición inmediata', desc:'Juego de posesión que, al perder el balón, obliga a defender inmediatamente sin parar el juego.', mat:['balones','conos','petos'], detalle:'Juega una posesión de 5 contra 5 en espacio reducido donde, en el momento de la pérdida, ese equipo pasa automáticamente a defender sin ninguna pausa. Activa tanto el aspecto físico como el de reacción táctica inmediata que caracteriza el fútbol sala de nivel. Consejo: no pites la pérdida, deja que el propio juego fluya para que la transición sea lo más real posible.'},
+      {id:'cdw5', nombre:'Activación específica de portero', desc:'Bloque de reflejos, salidas y juego con los pies para el portero, en paralelo al resto del grupo.', mat:['balones'], detalle:'Dedica 6-8 minutos a un trabajo específico de portero: paradas reactivas a corta distancia, salidas a los pies del rival y control-pase con los pies, ya que en esta categoría el portero-jugador empieza a ser relevante. Consejo: si el club dispone de un entrenador de porteros, este es el bloque ideal para que trabaje en paralelo mientras tú sigues con el resto del grupo.'}
+    ],
+    tech: [
+      {id:'cdt1', foco:'colocacion', nombre:'Control-orientación bajo presión real', desc:'Recepción de balón con oposición activa y contacto legal, orientando siempre hacia el espacio libre.', mat:['balones','conos'], detalle:'Por tríos con un defensor activo que puede presionar con contacto legal (sin empujar), el receptor debe controlar orientado hacia el lado libre a la primera. Es el mismo concepto de categorías anteriores pero ahora con una oposición prácticamente real. Consejo: exige velocidad de ejecución, en esta categoría un control lento ya es sancionado por cualquier defensor mínimamente trabajado.'},
+      {id:'cdt2', foco:'pases', nombre:'Pase a velocidad de ejecución', desc:'Secuencias de pase corto y medio exigiendo velocidad de ejecución y de decisión, no solo precisión.', mat:['balones','conos'], detalle:'Organiza circuitos de pase en movimiento donde la exigencia principal ya no es solo acertar, sino decidir y ejecutar rápido bajo presión de tiempo simulada (por ejemplo, cronometrando la secuencia). Consejo: introduce una variable de decisión (dos posibles receptores) para que el pase no sea automático sino una lectura real de la jugada.'},
+      {id:'cdt3', foco:'remate', nombre:'Finalización desde distintas posiciones', desc:'Remates a portería desde varias zonas y ángulos, con oposición o presión de tiempo.', mat:['balones','porterias'], detalle:'Monta estaciones de finalización desde distintas posiciones (frontal, lateral, tras conducción, tras pase) con algo de oposición o límite de tiempo para el disparo. El objetivo es que sepan resolver la finalización en situaciones variadas, no solo en el gesto aislado. Consejo: valora también la decisión de disparo (elegir el mejor momento) además de la ejecución técnica en sí.'},
+      {id:'cdt4', foco:'tactica', nombre:'1 contra 1 ofensivo con desequilibrio', desc:'Duelo individual donde el atacante busca desequilibrar con cambios de ritmo y finta antes de definir.', mat:['balones','porterias'], detalle:'Duelo 1 contra 1 desde una posición de ataque, donde el atacante debe emplear un recurso técnico claro (finta, cambio de ritmo, doble contacto) para desequilibrar al defensor antes de definir hacia portería. Trabaja el repertorio individual que a esta edad ya deben empezar a tener asentado. Consejo: deja que cada jugador explore su propio recurso favorito antes de corregir, la personalidad técnica también se entrena.'},
+      {id:'cdt5', foco:'tactica', nombre:'1 contra 1 defensivo con recuperación', desc:'Duelo defensivo centrado en recuperar el balón sin cometer falta, forzando la pérdida del rival.', mat:['balones'], detalle:'El mismo duelo pero desde el rol defensivo: el objetivo es recuperar el balón limpio o forzar que el atacante pierda el control, sin cometer infracción. Trabaja la temporización y el timing de entrada, habilidades defensivas de nivel superior a la simple contención de etapas anteriores. Consejo: premia explícitamente las recuperaciones limpias, es fácil que solo se valore el gesto ofensivo y se descuide el defensivo.'},
+      {id:'cdt6', foco:'tactica', nombre:'Superioridad e inferioridad numérica', desc:'Situaciones de 4 contra 3 y 3 contra 4 alternadas, trabajando ataque y defensa en desigualdad.', mat:['balones','porterias','conos'], detalle:'Alterna bloques de 4 contra 3 (el equipo en superioridad ataca) y 3 contra 4 (el equipo en inferioridad debe defender bien organizado) con finalización a portería en ambos casos. Es contenido táctico específico de nivel cadete, muy presente en los partidos reales por expulsiones o dobles penaltis. Consejo: explica que en inferioridad no se trata de correr más, sino de ocupar mejor los espacios centrales.'}
+    ],
+    match: [
+      {id:'cdm1', nombre:'Partido con sistema y rotaciones', desc:'Partido aplicando el sistema táctico habitual del equipo con rotaciones de posición durante el juego.', mat:['balones','porterias','petos'], detalle:'Juega un partido pidiendo que mantengan el sistema de referencia del equipo, pero introduciendo rotaciones controladas de posición (por ejemplo, ala y pívot intercambiando zona en una jugada) para empezar a dar flexibilidad táctica. Consejo: define de antemano qué rotación concreta quieres trabajar ese día, no dejes que improvisen rotaciones sin criterio.'},
+      {id:'cdm2', nombre:'Partido de superioridad e inferioridad', desc:'Partido en el que periódicamente un jugador se retira temporalmente, simulando doble penalti o expulsión.', mat:['balones','porterias','petos'], detalle:'Cada 3-4 minutos, retira temporalmente a un jugador de un equipo (rotando quién sale) simulando una situación de inferioridad real de partido, y observa cómo se reorganiza el equipo. Es una preparación directa para situaciones reales de competición. Consejo: aprovecha las pausas para preguntar al equipo en inferioridad cómo se han organizado, y corrige si hace falta.'},
+      {id:'cdm3', nombre:'Partido con ABP elaboradas', desc:'Partido incluyendo córners y saques de banda con jugadas ensayadas de dos o tres pases.', mat:['balones','porterias','petos'], detalle:'Define con cada equipo una jugada de córner y otra de saque de banda cerca de portería contraria, algo más elaboradas que en categorías anteriores (con un par de movimientos coordinados). Durante el partido, deben ejecutarlas cuando se dé la situación. Consejo: dedica un par de minutos antes del partido a ensayarlas estáticamente, así llegan con la jugada fresca.'},
+      {id:'cdm4', nombre:'Partido competitivo con roles fijos', desc:'Partido con roles de posición fijados de antemano, jugado con intensidad de competición real.', mat:['balones','porterias','petos'], detalle:'Asigna roles fijos (cierre, alas, pívot, portero) antes de empezar y juega con la intensidad y seriedad de un partido de competición, sin las rotaciones libres de otros ejercicios. Es el cierre natural de la sesión y el momento de aplicar todo lo trabajado con exigencia real. Consejo: deja que ellos mismos se animen y se corrijan entre compañeros, a esta edad ya pueden asumir parte del liderazgo del equipo en pista.'}
+    ]
+  };
+
+  var BANK_JUVENIL = {
+    warmup: [
+      {id:'jvw1', nombre:'Activación de alta intensidad con balón', desc:'Calentamiento estructurado de alta intensidad, integrando balón desde el primer bloque.', mat:['balones','conos'], detalle:'Realiza movilidad dinámica breve (2 min) y pasa rápido a activación con balón: pases en movimiento, cambios de ritmo y algún contacto físico legal. A este nivel el calentamiento debe acercarse ya al ritmo real de partido desde el principio. Consejo: usa este bloque también para observar el estado físico y anímico de cada jugador antes de planificar la intensidad del resto de la sesión.'},
+      {id:'jvw2', nombre:'Rondo de posesión a ritmo de partido', desc:'Seis atacantes frente a cinco defensores, posesión muy exigente cercana a la igualdad numérica.', mat:['balones','conos'], detalle:'En espacio reducido, 6 jugadores mantienen el balón frente a 5 defensores que presionan a máxima intensidad. La proporción casi igualada (6 contra 5) representa una exigencia técnico-táctica de nivel pre-senior. Consejo: cronometra y compara la duración media de las posesiones entre sesiones, es un buen indicador de progreso del equipo.'},
+      {id:'jvw3', nombre:'Circuito de velocidad y potencia', desc:'Trabajo específico de velocidad y potencia con y sin balón, con recuperaciones completas.', mat:['balones','conos'], detalle:'Combina series de sprint corto sin balón (máxima velocidad) con repeticiones equivalentes conduciendo balón, comparando tiempos, y deja recuperación completa entre series para mantener la calidad de ejecución. Consejo: a este nivel ya puedes registrar tiempos y llevar una progresión individual a lo largo de la temporada.'},
+      {id:'jvw4', nombre:'Posesión con pressing en bloque', desc:'Juego de posesión donde el equipo sin balón defiende organizado en bloque, no de forma individual.', mat:['balones','conos','petos'], detalle:'Juega una posesión de 5 contra 5 exigiendo que el equipo sin balón se mueva y presione como bloque coordinado, no como acciones individuales de robo. Introduce ya el concepto de pressing colectivo propio de equipos de nivel superior. Consejo: para el juego si ves presión desorganizada y pregunta qué compañero debía haber cerrado la línea de pase.'},
+      {id:'jvw5', nombre:'Activación de portero-jugador avanzado', desc:'Trabajo de portero centrado en el juego con los pies y la incorporación como jugador de campo.', mat:['balones'], detalle:'Además del trabajo habitual de reflejos y salidas, dedica una parte específica a la salida jugada con los pies y a la incorporación puntual como jugador de campo (portero-jugador), habilidad diferencial en el fútbol sala de nivel alto. Consejo: si el portero tiene buen pie, dale protagonismo en los rondos de posesión del resto de la plantilla, es un entrenamiento perfecto para él.'}
+    ],
+    tech: [
+      {id:'jvt1', foco:'colocacion', nombre:'Circulación con ritmo de posesión alto', desc:'Mantener el balón con velocidad de circulación alta, minimizando el número de toques por jugador.', mat:['balones','conos'], detalle:'Trabaja posesión en espacio amplio exigiendo un máximo de dos toques por jugador y movimiento constante de apoyos, buscando que el balón circule más rápido que la presión rival. Es la consolidación de todo lo trabajado en categorías anteriores, ahora exigido con intensidad de competición. Consejo: si el ritmo baja, no es un problema técnico normalmente, sino de movimiento sin balón: revisa primero los apoyos.'},
+      {id:'jvt2', foco:'remate', nombre:'Finalización bajo presión defensiva real', desc:'Remate a portería con un defensor activo aplicando presión real hasta el último instante.', mat:['balones','porterias'], detalle:'Situaciones de finalización con un defensor que presiona con intensidad real (sin dejar espacio de cortesía) hasta el momento del disparo, obligando a decisiones rápidas y ejecución bajo fatiga y presión. Consejo: mide también la decisión (disparar, pasar, proteger el balón) no solo el resultado del disparo, el buen jugador a este nivel sabe cuándo no chutar.'},
+      {id:'jvt3', foco:'tactica', nombre:'Transición con portero-jugador', desc:'Trabajo de transición defensa-ataque incorporando al portero como jugador de campo en la salida.', mat:['balones','porterias'], detalle:'Practica situaciones de recuperación de balón donde el portero se incorpora como jugador extra en la salida, generando superioridad numérica inmediata. Es contenido táctico de nivel avanzado, propio de equipos que ya compiten con exigencia. Consejo: define claramente cuándo SÍ y cuándo NO debe salir el portero-jugador, el mal uso de este recurso es habitual a estas edades.'},
+      {id:'jvt4', foco:'tactica', nombre:'Pressing coordinado en bloque', desc:'Ejercicio específico de presión colectiva organizada, con roles y coberturas definidas entre compañeros.', mat:['balones','conos','petos'], detalle:'Trabaja con el equipo completo el pressing en bloque: quién presiona al portador, quién cubre las líneas de pase cercanas y quién cubre el espacio a la espalda de la presión. Es de los contenidos tácticos más exigentes de esta etapa formativa. Consejo: hazlo primero sin oposición real (paseado, explicando cada movimiento) antes de meter velocidad e intensidad.'},
+      {id:'jvt5', foco:'tactica', nombre:'Rotaciones de pívot', desc:'Trabajo específico de los movimientos y rotaciones del pívot con el resto del bloque ofensivo.', mat:['balones','conos'], detalle:'Practica los movimientos característicos del pívot (fijar, girar, asociarse con el ala, ceder la posición) y cómo el resto del equipo rota para ocupar el espacio que deja libre. Es contenido de especialización posicional propio de esta categoría. Consejo: rota a distintos jugadores por esta posición aunque no sea su rol habitual, entender el pívot mejora la comprensión táctica general del equipo.'},
+      {id:'jvt6', foco:'tactica', nombre:'Superioridad 5 contra 4 con último pase', desc:'Situaciones de superioridad numérica cerca de portería, exigiendo calidad en el último pase antes del remate.', mat:['balones','porterias','conos'], detalle:'En una superioridad de 5 contra 4 cerca del área, el objetivo no es solo llegar con ventaja sino ejecutar con calidad el último pase antes del remate, el momento más determinante de la jugada. Consejo: para la jugada justo antes del disparo a veces y pregunta si había una opción de pase mejor que la elegida, entrena la lectura del último metro.'}
+    ],
+    match: [
+      {id:'jvm1', nombre:'Partido con sistema y variantes tácticas', desc:'Partido cambiando de sistema o variante táctica a mitad de partido para trabajar la adaptación.', mat:['balones','porterias','petos'], detalle:'Empieza el partido con un sistema definido y, a mitad, cambia una variante táctica (por ejemplo, pasar de 1-2-1 a un 2-2, o activar un pressing más alto) para que el equipo se adapte en tiempo real. Trabaja la flexibilidad táctica propia de un equipo de nivel competitivo. Consejo: avisa del cambio con una señal clara y breve, no pares el partido más de lo necesario para no perder el ritmo competitivo.'},
+      {id:'jvm2', nombre:'Partido con portero-jugador', desc:'Partido en el que un equipo puede activar el recurso del portero-jugador en momentos determinados.', mat:['balones','porterias','petos'], detalle:'Permite que uno de los equipos juegue con portero-jugador (5 contra 4) en tramos definidos del partido, mientras el rival defiende con normalidad. Trabaja tanto el ataque con superioridad como la defensa ante esta situación, habitual en partidos reales de nivel. Consejo: rota qué equipo usa el recurso en cada tramo, para que todos entrenen ambos roles.'},
+      {id:'jvm3', nombre:'Partido competitivo con roles fijos', desc:'Partido con roles y sistema fijados de antemano, jugado con exigencia y ritmo de competición oficial.', mat:['balones','porterias','petos'], detalle:'Juega con la seriedad y ritmo de un partido de competición real, con roles fijados y sin las facilidades de otros ejercicios de entreno. Es el momento de exigir el nivel de compromiso que se espera en un partido oficial. Consejo: deja que el capitán o los jugadores más experimentados gestionen parte de la organización en pista, fomenta el liderazgo interno del grupo.'},
+      {id:'jvm4', nombre:'Partido con ABP y transiciones rápidas', desc:'Partido que combina córners, saques de banda ensayados y énfasis en la transición inmediata tras recuperar.', mat:['balones','porterias','petos'], detalle:'Combina jugadas ensayadas a balón parado con la exigencia de transición rápida tras cualquier recuperación, dos de los aspectos que más deciden partidos ajustados a este nivel. Consejo: lleva un pequeño recuento de goles según su origen (ABP, transición, jugada elaborada) para dar feedback concreto al equipo después del entreno.'}
+    ]
+  };
+
+  var FOCO_LABEL = {colocacion:'Colocación', pases:'Pases', conduccion:'Conducción', remate:'Remate', tactica:'Táctica'};
   var MATERIAL_LABEL = {conos:'Conos', balones:'Balones', petos:'Petos', aros:'Aros', picas:'Picas', porterias:'Porterías'};
   var MATERIAL_KEYS = ['conos','balones','petos','aros','picas','porterias'];
 
@@ -469,6 +600,42 @@
     }
   };
   var AGE_KEYS = ['4','5','6','mixto'];
+
+  // categorías oficiales de fútbol sala base, cada una con su propio banco de ejercicios
+  var CATEGORIES = {
+    prebenjamin: { label: 'Prebenjamín', ageRange: '4-6 años', bank: BANK },
+    benjamin:    { label: 'Benjamín',    ageRange: '7-8 años',  bank: BANK_BENJAMIN },
+    alevin:      { label: 'Alevín',      ageRange: '9-10 años', bank: BANK_ALEVIN },
+    infantil:    { label: 'Infantil',    ageRange: '11-12 años', bank: BANK_INFANTIL },
+    cadete:      { label: 'Cadete',      ageRange: '13-14 años', bank: BANK_CADETE },
+    juvenil:     { label: 'Juvenil',     ageRange: '15-16 años', bank: BANK_JUVENIL }
+  };
+  var CATEGORY_KEYS = ['prebenjamin','benjamin','alevin','infantil','cadete','juvenil'];
+
+  // reparto de los 60 minutos y consejo de metodología para las categorías que no son prebenjamín
+  // (prebenjamín usa el desglose más fino de AGE_INFO por edad exacta, de 4 a 6 años)
+  var CATEGORY_INFO = {
+    benjamin: {
+      warmMin: 15, techMin: 30, matchMin: 15,
+      consejo: 'En benjamín ya puedes corregir el gesto técnico con normalidad: control orientado, pase con las dos piernas, primeros regates. Sigue siendo fútbol-juego, pero el error ya es una oportunidad para aprender, no solo para animar. Introduce el 1 contra 1 formal y deja que el partido premie las conductas que has trabajado en la parte técnica.'
+    },
+    alevin: {
+      warmMin: 10, techMin: 35, matchMin: 15,
+      consejo: 'A partir de alevín entran los primeros conceptos tácticos de verdad: amplitud, apoyos, superioridad numérica y sistema básico 1-2-1. No lo enseñes con pizarra, que lo entiendan jugando en los rondos y en el partido dirigido. El pressing tras pérdida empieza a ser un hábito exigible, no solo deseable.'
+    },
+    infantil: {
+      warmMin: 10, techMin: 35, matchMin: 15,
+      consejo: 'En infantil el sistema táctico ya se sostiene con roles definidos (cierre, alas, pívot) y aparecen las transiciones organizadas y las primeras ABP trabajadas. El calentamiento empieza a tener entidad física propia. Sigue premiando la comprensión del porqué táctico, no solo la ejecución del gesto.'
+    },
+    cadete: {
+      warmMin: 10, techMin: 30, matchMin: 20,
+      consejo: 'Cadete exige ya nivel: superioridades e inferioridades numéricas, rotaciones de sistema, ABP elaboradas y una carga física real dentro de las propias tareas. El 1 contra 1 se trabaja en ambas direcciones, ataque y defensa, con la misma exigencia. Es la etapa donde se empieza a parecer a un entreno "de mayores".'
+    },
+    juvenil: {
+      warmMin: 10, techMin: 30, matchMin: 20,
+      consejo: 'En juvenil el nivel es pre-senior: sistemas con rotaciones, portero-jugador, pressing coordinado en bloque y roles tácticos automatizados. Exige intensidad de competición real y deja que los propios jugadores lideren parte de la organización en pista, ya están preparados para asumir esa responsabilidad.'
+    }
+  };
 
   var ICON_WARMUP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="7" y2="7"/><line x1="17" y1="17" x2="18.8" y2="18.8"/><line x1="18.8" y1="5.2" x2="17" y2="7"/><line x1="7" y1="17" x2="5.2" y2="18.8"/></svg>';
   var ICON_TECH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>';
@@ -569,6 +736,11 @@
     return checked ? checked.value : 'mixto';
   }
 
+  function selectedCategoria(){
+    var checked = document.querySelector('input[name="categoria"]:checked');
+    return (checked && CATEGORIES[checked.value]) ? checked.value : 'prebenjamin';
+  }
+
   function matAndAgeOK(materials, edadNum){
     return function(item){
       var matOk = item.mat.every(function(m){ return materials.indexOf(m) !== -1; });
@@ -577,12 +749,31 @@
     };
   }
 
-  function generateSession(dateStr, materials, edad){
-    var ageKey = AGE_INFO[edad] ? edad : 'mixto';
-    var ageInfo = AGE_INFO[ageKey];
-    var edadNum = ageKey === 'mixto' ? null : Number(ageKey);
+  function generateSession(dateStr, materials, categoria, edad){
+    var catKey = CATEGORIES[categoria] ? categoria : 'prebenjamin';
+    var bank = CATEGORIES[catKey].bank;
 
-    var last2 = STATE.history.slice(0,2);
+    var sessionInfo; // {label, consejo, warmMin, techMin, matchMin}
+    var edadNum = null;
+    if(catKey === 'prebenjamin'){
+      var ageKey = AGE_INFO[edad] ? edad : 'mixto';
+      var ageInfo = AGE_INFO[ageKey];
+      edadNum = ageKey === 'mixto' ? null : Number(ageKey);
+      sessionInfo = {
+        label: 'Prebenjamín · ' + ageInfo.label,
+        consejo: ageInfo.consejo,
+        warmMin: ageInfo.warmMin, techMin: ageInfo.techMin, matchMin: ageInfo.matchMin
+      };
+    } else {
+      var catInfo = CATEGORY_INFO[catKey];
+      sessionInfo = {
+        label: CATEGORIES[catKey].label + ' (' + CATEGORIES[catKey].ageRange + ')',
+        consejo: catInfo.consejo,
+        warmMin: catInfo.warmMin, techMin: catInfo.techMin, matchMin: catInfo.matchMin
+      };
+    }
+
+    var last2 = STATE.history.slice(0,2).filter(function(s){ return (s.categoria || 'prebenjamin') === catKey; });
     var recentWarmup = [];
     var recentTech = [];
     var recentMatch = [];
@@ -593,22 +784,22 @@
     });
 
     var ok = matAndAgeOK(materials, edadNum);
-    var warmPool = BANK.warmup.filter(ok);
-    var techPool = BANK.tech.filter(ok);
-    var matchPool = BANK.match.filter(ok);
+    var warmPool = bank.warmup.filter(ok);
+    var techPool = bank.tech.filter(ok);
+    var matchPool = bank.match.filter(ok);
 
     var chosenWarm = pickExcluding(warmPool, 2, recentWarmup);
     var chosenTech = pickTechDiverse(techPool, recentTech);
     var chosenMatchArr = pickExcluding(matchPool, 1, recentMatch);
     var chosenMatch = chosenMatchArr[0] || null;
 
-    var warmMinutes = splitMinutes(ageInfo.warmMin, chosenWarm.length);
+    var warmMinutes = splitMinutes(sessionInfo.warmMin, chosenWarm.length);
     var warmup = chosenWarm.map(function(item, idx){
       var copy = {}; for(var k in item) copy[k]=item[k];
       copy.minutes = warmMinutes[idx];
       return copy;
     });
-    var techMinutes = splitMinutes(ageInfo.techMin, chosenTech.length);
+    var techMinutes = splitMinutes(sessionInfo.techMin, chosenTech.length);
     var tecnica = chosenTech.map(function(item, idx){
       var copy = {}; for(var k in item) copy[k]=item[k];
       copy.minutes = techMinutes[idx];
@@ -617,18 +808,19 @@
     var partido = null;
     if(chosenMatch){
       partido = {}; for(var k2 in chosenMatch) partido[k2]=chosenMatch[k2];
-      partido.minutes = ageInfo.matchMin;
+      partido.minutes = sessionInfo.matchMin;
     }
 
     return {
       id: genId(),
       date: dateStr,
-      edad: ageKey,
-      edadLabel: ageInfo.label,
-      consejo: ageInfo.consejo,
-      warmMin: ageInfo.warmMin,
-      techMin: ageInfo.techMin,
-      matchMin: ageInfo.matchMin,
+      categoria: catKey,
+      edad: catKey === 'prebenjamin' ? (AGE_INFO[edad] ? edad : 'mixto') : null,
+      edadLabel: sessionInfo.label,
+      consejo: sessionInfo.consejo,
+      warmMin: sessionInfo.warmMin,
+      techMin: sessionInfo.techMin,
+      matchMin: sessionInfo.matchMin,
       warmupIds: warmup.map(function(i){return i.id;}),
       techIds: tecnica.map(function(i){return i.id;}),
       matchId: partido ? partido.id : null,
@@ -742,9 +934,10 @@
 
   function handleGenerate(){
     var materials = selectedMaterials();
+    var categoria = selectedCategoria();
     var edad = selectedEdad();
     var dateStr = $('date-input').value;
-    DRAFT = generateSession(dateStr, materials, edad);
+    DRAFT = generateSession(dateStr, materials, categoria, edad);
     render();
   }
 
@@ -859,6 +1052,15 @@
       });
     });
 
+    CATEGORY_KEYS.forEach(function(k){
+      var el = $('cat-' + k);
+      el.addEventListener('change', function(){
+        CATEGORY_KEYS.forEach(function(k2){ $('cat-' + k2).removeAttribute('checked'); });
+        if(this.checked) this.setAttribute('checked', '');
+        updateSubedadVisibility();
+      });
+    });
+
     $('results').addEventListener('click', function(e){
       var delBtn = e.target.closest('[data-action="delete"]');
       if(delBtn){ handleDeleteHistory(delBtn.getAttribute('data-id')); return; }
@@ -875,6 +1077,10 @@
     });
   }
 
+  function updateSubedadVisibility(){
+    $('subedad-field').hidden = selectedCategoria() !== 'prebenjamin';
+  }
+
   function toggleExercise(exItem){
     var detail = exItem.querySelector('.item-detail');
     var hint = exItem.querySelector('.toggle-hint-text');
@@ -887,6 +1093,7 @@
   function boot(){
     loadState();
     attachHandlers();
+    updateSubedadVisibility();
     var dateInput = $('date-input');
     if(!dateInput.value){
       var t = new Date();
